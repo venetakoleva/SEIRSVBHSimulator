@@ -12,10 +12,10 @@ If you use this software, please cite:
 Koleva, Veneta, Hristov, Tsvetan. (2025). *SEIRSVBH Simulator*. DOI: 10.5281/zenodo.xxxxx   #[TODO]
 
 ```bibtex
-@software{lastname2025seirsvbh,
-  title  = {SEIRSVBH Simulator},
-  author = {Koleva, Veneta and Hristov, Tsvetan},
-  year   = {2025},
-  doi    = {10.5281/zenodo.xxxxx}, #[TODO]
-  url    = {https://github.com/venetakoleva/SEIRSVBHSimulator}
+@software{KolevaHristov2025SEIRSVBH,
+  title        = {SEIRSVBH Simulator},
+  author       = {Koleva, Veneta and Hristov, Tsvetan},
+  year         = {2025},
+  doi          = {10.5281/zenodo.xxxxx}, #[TODO]
+  url          = {https://github.com/venetakoleva/SEIRSVBHSimulator}
 }
