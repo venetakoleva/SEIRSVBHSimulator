@@ -1,0 +1,27 @@
+### `CITATION.cff`
+```yaml
+cff-version: 1.2.0
+message: "If you use this software, please cite it."
+title: "SEIRSVBH Simulator"
+version: 1.0.0
+date-released: 2025-10-11
+authors:
+  - family-names: Koleva
+    given-names: Veneta
+    orcid: "0000-0001-6019-7106"
+  - family-names: Hristov
+    given-names: Tsvetan
+    orcif: "0000-0002-6417-1816"
+doi: 10.5281/zenodo.xxxxx   #[TODO]
+repository-code: "https://github.com/venetakoleva/SEIRSVBHSimulator"
+license: Apache-2.0
+preferred-citation:
+  type: software
+  title: "SEIRSVBH Simulator"
+  authors:
+    - family-names: Koleva
+      given-names: Veneta
+    - family-names: Hristov
+      given-names: Tsvetan
+  year: 2025
+  doi: 10.5281/zenodo.xxxxx #[TODO]
