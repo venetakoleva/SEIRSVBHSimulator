@@ -1158,7 +1158,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                                 plot(ax, tCommon, modelHt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Model');
                                 legend(ax, 'Location','northwest','FontSize',12,'Box','on');
                                 title(ax, 'Component of computed solution: H_{total}', 'FontSize',16, 'Interpreter','tex');
-                                ylabel(ax,'Individuals (cumulative)','FontSize',16);
+                                ylabel(ax,'Individuals (cumulative)','FontSize',12);
                             end
                         end
                 end
