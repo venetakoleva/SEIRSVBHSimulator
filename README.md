@@ -11,7 +11,7 @@ It provides both script-based and  graphical workflows for:
 
 ## 🧠 Scientific Context
 
-This simulator was developed as part of a scientific study (currently under review).  
+This simulator was developed as part of a scientific study (currently under review; \href{https://TODO.com/article}{link}).).  
 All computational experiments and visualizations presented in the paper were performed using the MATLAB **driver scripts** in `+seirsvbh/+simulator/+main`.  
 The graphical application **SEIRSVBHSimulator** (`+ui`) was additionally developed to enable interactive exploration of the SEIRSVBH model parameters and results without the need for MATLAB scripting.
 
