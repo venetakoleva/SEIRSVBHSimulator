@@ -62,6 +62,7 @@ SEIRSVBH_Simulator/
 - MATLAB R2021b or newer  
 - Parallel Computing Toolbox (for multi-worker sweeps)  
 - Add the `SEIRSVBH_Simulator` folder to the path.
+```
 ---
 
 ## 🧩 Stage 1 — Relative-errors analysis
