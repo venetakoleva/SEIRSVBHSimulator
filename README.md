@@ -9,6 +9,12 @@ It provides both graphical and script-based workflows for:
 - 🔹 Solving the **Inverse Data Problem (IDP)** and running the **direct SEIRSVBH model**  
 - 🔹 Visualizing parameter trajectories and comparing model output to reported data  
 
+## 🧠 Scientific Context
+
+This simulator was developed as part of a scientific study (currently under review).  
+All computational experiments and visualizations presented in the paper were performed using the MATLAB **driver scripts** in `+seirsvbh/+simulator/+main`.  
+The graphical application **SEIRSVBHSimulator** (`+ui`) wss additionally developed to enable interactive exploration of the SEIRSVBH model parameters and results without the need for MATLAB scripting.
+
 ---
 
 ## 🗂️ Repository structure
