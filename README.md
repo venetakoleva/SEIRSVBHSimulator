@@ -4,10 +4,10 @@
 **SEIRSVBH epidemiological model** (*Susceptible–Exposed–Infectious–Recovered–Susceptible-Vaccinated–Hospitalized*).  
 It provides both script-based and  graphical workflows for:
 
-- 🔹 Computing **relative l₂ and l∞ errors** across (ξ, c) parameter grids  
-- 🔹 Estimating parameter values that minimize the discrepancy between model predictions and reported data
-- 🔹 Solving the **Inverse Data Problem (IDP)** and running the **direct SEIRSVBH model**  
-- 🔹 Visualizing parameter trajectories and comparing model output to reported data  
+- Computing **relative l₂ and l∞ errors** across (ξ, c) parameter grids  
+- Estimating parameter values that minimize the discrepancy between model predictions and reported data
+- Solving the **Inverse Data Problem (IDP)** and running the **direct SEIRSVBH model**  
+- Visualizing parameter trajectories and comparing model output to reported data  
 
 ## 🧠 Scientific Context
 
