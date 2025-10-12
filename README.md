@@ -65,7 +65,7 @@ SEIRSVBH_Simulator/
 ```
 ---
 
-## 🧩 Stage 1 — Relative-errors analysis
+## 🧩 Stage 1 - Relative-errors analysis
 
 ### 🔘 Using the GUI
 1. Run the app:
@@ -103,7 +103,7 @@ This script performs the following steps:
 
 ---
 
-## 🧩 Stage 2 — Inverse Data Problem and Parameter Identification
+## 🧩 Stage 2 - Inverse Data Problem and Parameter Identification
 
 ### 🔘 Using the GUI
 In the **Solve and Plot Inverse Data Problem** tab:
@@ -117,7 +117,7 @@ In the **Solve and Plot Inverse Data Problem** tab:
 
 ---
 
-## 🧩 Stage 3 — Direct Problem Simulation
+## 🧩 Stage 3 - Direct Problem Simulation
 
 ### 🔘 Using the GUI
 In the **Solve and Plot Direct Problem** tab:
