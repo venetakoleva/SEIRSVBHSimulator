@@ -1726,14 +1726,16 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
 
        
         function styleDateAxisUI(app, ax, t0, t1, mode)
-        %STYLEDATEAXISUI for Axes
-        %    Monthly ticks "01-mmm" (font size 10)
-        %    Year lines (Jan-01) dashed, with labels that MOVE with zoom/pan (xline)
-        %    In 'params' mode: adds 08-Jun (start) and 12-Mar (end) ticks,
-        %    hides the end-year 01-Mar label to avoid overlap.
-        %    Uses external UI "Time" label (axes xlabel hidden).
+        %STYLEDATEAXISUI Style a date x-axis for Axes/UIAxes (R2020b+ compatible).
+        %   - Monthly ticks "dd-mmm" (font size 10)
+        %   - Year lines (Jan-01) dashed with labels that move on zoom/pan (xline)
+        %   - 'params' mode: adds 08-Jun (start) and 12-Mar (end) ticks and hides 01-Mar label
+        %   - Non-'params' (direct) plots: show "Time" x-label
+        %
+        %   styleDateAxisUI(app, ax, t0, t1)
+        %   styleDateAxisUI(app, ax, t0, t1, 'params')
         
-            if nargin < 4, mode = ''; end
+            if nargin < 5, mode = ''; end
             if t1 < t0, [t0,t1] = deal(t1,t0); end
         
             % Pad ends horizontally
@@ -1748,51 +1750,57 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             if isParams
                 tJun = datetime(year(t0),6,8);
                 tMar = datetime(year(t1),3,12);
-                ticks = unique([ticks, tJun, tMar]);
             else
                 tJun = datetime(year(t0),6,7);
                 tMar = datetime(year(t1),3,12);
-                ticks = unique([ticks, tJun, tMar]);
             end
+            ticks = unique([ticks, tJun, tMar]); 
         
-            % Build labels
+            % Build labels (use datestr for R2020b compatibility)
             lbl = cell(size(ticks));
             for k = 1:numel(ticks)
                 lbl{k} = char(datestr(ticks(k),'dd-mmm'));  % e.g., '01-Jul'
             end
         
+            % Hide 01-Mar of end year to avoid overlap
+            kMar01 = find(ticks == datetime(year(t1),3,1), 1);
+            if ~isempty(kMar01), lbl{kMar01} = ''; end
+        
+            % Ensure exact text for the special ticks
             if isParams
                 kJun = find(ticks == datetime(year(t0),6,8), 1);
                 if ~isempty(kJun), lbl{kJun} = '08-Jun'; end
                 kMar = find(ticks == datetime(year(t1),3,12), 1);
                 if ~isempty(kMar), lbl{kMar} = '12-Mar'; end
-                kMar01 = find(ticks == datetime(year(t1),3,1), 1);
-                if ~isempty(kMar01), lbl{kMar01} = ''; end
             else
-                kMar01 = find(ticks == datetime(year(t1),3,1), 1);
-                if ~isempty(kMar01), lbl{kMar01} = ''; end
+                % states view already has 07-Jun / 12-Mar labels by default
             end
         
-            % Shift 08-Jun label slightly to avoid overlap
-            dJun = datetime(year(t0), isParams * 6 + ~isParams * 6, isParams * 8 + ~isParams * 7);
+            % Slightly shift the June tick to reduce label collisions
+            if isParams
+                dJun = datetime(year(t0), 6, 8);
+            else
+                dJun = datetime(year(t0), 6, 7);
+            end        
             kJun = find(ticks == dJun, 1);
             if ~isempty(kJun)
-                ticks(kJun) = dJun + hours(20);  % shift slightly forward
+                ticks(kJun) = dJun + hours(20);  % small shift
             end
         
-            % Apply ticks and labels to Axes
+            % ----- Apply ticks/labels -----
             ax.XTick = ticks;
-            ax.XTickLabel = lbl;
+            ax.XTickLabel     = lbl;
             ax.XTickLabelMode = 'manual';
-            ax.XTickLabelRotation = 45;  % rotate labels for clarity
+            ax.XTickLabelRotation = 45;     % adjust if your param plots use a different rotation
             ax.TickLabelInterpreter = 'none';
             ax.FontSize = 10;
-            ax.XLabel.String = '';
-            ax.XLabel.Visible = 'off';
         
-            % ----- Year vertical guide lines -----
+            ax.XLabel.String  = 'Time';
+            ax.XLabel.Visible = 'on';
+            ax.XLabel.FontSize = 16;
+        
+            % ----- Year guide lines (labels move with zoom/pan) -----
             delete(findall(ax,'Type','ConstantLine','Tag','YearMarker'));
-        
             XL = ax.XLim;
             y0 = year(XL(1)); y1 = year(XL(2));
             hold(ax,'on');
@@ -1803,14 +1811,19 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                     'Color',[0.3 0.3 0.3], 'LineWidth',0.9, ...
                     'LabelVerticalAlignment','bottom', ...
                     'LabelHorizontalAlignment','right', ...
-                    'HandleVisibility','off', ...
-                    'Tag','YearMarker');
+                    'HandleVisibility','off', 'Tag','YearMarker');
             end
             hold(ax,'off');
         
-            grid(ax,'on');
-            box(ax,'off');
-        end
+            % ----- Title styling to match parameter plots -----
+            if ~isempty(ax.Title)
+                ax.Title.FontSize   = 16;
+                ax.Title.FontWeight = 'bold';
+                % ax.Title.Interpreter = 'none';
+            end
+        
+            grid(ax,'on'); box(ax,'off');
+        end 
     end
     %% ==== PUBLIC CTOR/DTOR ====
     methods (Access = public)
