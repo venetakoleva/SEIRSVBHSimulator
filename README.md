@@ -136,20 +136,15 @@ runIDPandDirectDriver.m
 
 This script performs the following steps:
 1. Loads results.mat and extracts the optimal (ξ, c) values corresponding to the minimum relative error.
-2. Reads the selected (ξ, c) pair from the results file and initializes the Inverse Data Problem (IDP) solver:
-   ```matlab
-   idpSol = IDPSolver(xi, h, c, psiFunc, reportedData);
-   ```
-3. Plots the time evolution of the parameters estimated by the IDP solver using `plotIDPSolution`.
-4. Runs the direct ODE solver  
-   ```matlab
-   ODESol = directProblemSolver(idpSol, reportedData, h);
-   ```
-7. Compares computed model output vs officially reported data using (`plotModelVsReported`).
+2. Reads the selected (ξ, c) pair from the results file and initializes the Inverse Data Problem (IDP) solver: calls (`IDPSolver`).
+3. Plots the time evolution of the parameters estimated by the IDP solver using (`plotIDPSolution`).
+4. Runs the direct ODE solver using `directProblemSolver`.
+5. Compares computed model output vs officially reported data using (`plotModelVsReported`).
 
 ---
 
 ## 🧾 Data files
+The data files contain officially reported COVID-19 data for Bulgaria over the time period from 07 June 2020 through 12 March 2023. 
 
 | File | Required variables |
 |------|--------------------|
