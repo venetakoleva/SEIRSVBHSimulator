@@ -1177,7 +1177,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 % ---- Titles & Y label (no X label; helper hides external Time label) ----
                 % Keep these typography choices local (does not touch X axis)
                 % Title already set per-case. Ensure consistent Y label size.
-                if ~isempty(ax.YLabel), ax.YLabel.FontSize = 16; end
+                if ~isempty(ax.YLabel), ax.YLabel.FontSize = 12; end
         
             catch ME
                 uialert(app.UIFigure, ME.message, 'Plot Direct Error');
