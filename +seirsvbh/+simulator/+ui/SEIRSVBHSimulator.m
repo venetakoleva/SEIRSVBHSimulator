@@ -56,10 +56,12 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         selectedCStep       double = [];
         selectedRelPlot     string = "";
         IsInitializing      logical = true;
+   
+    
 
         % IDP controls
         IDPGrid             matlab.ui.container.GridLayout
-        XiIDPField          matlab.ui.control.NumericEditField
+        XiIDPField          matlab.ui.control.NumericEditField 
         CIDPField           matlab.ui.control.NumericEditField
         PsiIDPDrop          matlab.ui.control.DropDown
         IDPTipLbl           matlab.ui.control.Label
@@ -95,14 +97,18 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
 
     %% ==== APP STATE ====
     properties (Access = private)
-        statesData  struct = struct()
-        paramsData  struct = struct()
-        h           double = 1.0
-        psiDefault  string = "psiQuadratic"
-        matFile     string = "results.mat"
+        statesData      struct  = struct()
+        paramsData      struct  = struct()
+        h               double  = 1.0
+        psiDefault      string  = "psiQuadratic"
+        matFile         string  = "results.mat"
 
-        idpSol      struct = struct()
-        ODESol      struct = struct()
+        idpSol          struct  = struct()
+        ODESol          struct  = struct()
+        xiMin           double  = NaN
+        cMin            double  = NaN
+        IsComputing     logical = false
+        hasFreshResults logical = false
     end
     
  
@@ -158,7 +164,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         
                 app.updateDataStatus();
                 if ~isempty(fieldnames(app.statesData)) && ~isempty(fieldnames(app.paramsData))
-                    app.logMsg('Data ready: states + params loaded.');
+                    app.logMsg('Data ready: states and parameters loaded.');
                 else
                     app.logMsg('Hint: Use the "Load … MAT" buttons to select files manually if needed.');
                 end
@@ -170,15 +176,12 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
     
 
         function onTabChanged(app, ev)
-        
+
             oldTab = ev.OldValue;
-        
+            
             % Reset defaults on the tab we are leaving
             if oldTab == app.IDPTab
-                app.XiIDPField.Limits = [0 1];
-                app.XiIDPField.Value  = 0.41;
-                app.CIDPField.Limits  = [-0.25 0.25];
-                app.CIDPField.Value   = -0.005;
+
                  % Reset param-plot prompt
                  if ~isempty(app.ParamPlotDrop) && isvalid(app.ParamPlotDrop)
                     app.ParamPlotDrop.Value = "";    
@@ -189,10 +192,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 
         
             elseif oldTab == app.DirectTab
-                app.XiDirectField.Limits = [0 1];
-                app.XiDirectField.Value  = 0.41;
-                app.CDirectField.Limits  = [-0.25 0.25];
-                app.CDirectField.Value   = -0.005;
         
                 % Reset direct plot-type prompt 
                 if ~isempty(app.DirectPlotDrop) && isvalid(app.DirectPlotDrop)
@@ -203,20 +202,20 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 end
 
             elseif oldTab == app.RelErrTab
-                % Reset dropdowns to the prompt
-                try
-                    app.XiKnotsDrop.Value = "";     
-                catch
-                    app.XiKnotsDrop.Value = "Choose ξ";
-                end
-                try
-                    app.CKnotsDrop.Value = "";       
-                catch
-                    app.CKnotsDrop.Value = "Choose c";
-                end
-        
-                if isprop(app,'selectedXiStep'), app.selectedXiStep = ""; end   
-                if isprop(app,'selectedCStep'),  app.selectedCStep  = ""; end  
+                % % Reset dropdowns to the prompt
+                % try
+                %     app.XiKnotsDrop.Value = "";     
+                % catch
+                %     app.XiKnotsDrop.Value = "Choose ξ";
+                % end
+                % try
+                %     app.CKnotsDrop.Value = "";       
+                % catch
+                %     app.CKnotsDrop.Value = "Choose c";
+                % end
+                % 
+                % if isprop(app,'selectedXiStep'), app.selectedXiStep = ""; end   
+                % if isprop(app,'selectedCStep'),  app.selectedCStep  = ""; end  
 
 
                 % Reset rel err plot-type prompt
@@ -228,6 +227,10 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 end
             end
             app.showDefaultEmbedded(ev.NewValue);
+            %  % Track previous tab
+            % if isprop(app,'PreviousTab')
+            %     app.PreviousTab = newTab;
+            % end
         end
 
         function updateDataStatus(app)
@@ -447,115 +450,216 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
 
         % Relative Error 
         function onComputeRelErr(app, varargin)
-            % Clear the embedded plotting area before starting a new compute
+               
+             app.invalidateResults();   % clear freshness for this session
 
-             if isempty(app.selectedXiStep) || isempty(app.selectedCStep)
-                uialert(app.UIFigure,'Please choose both ξ and c step sizes.','Missing input');
+             % Prevent starting another computation if one is already running
+             if app.IsComputing
+                uialert(app.UIFigure, ...
+                    'A relative error computation is already running. Please wait until it completes.', ...
+                    'Computation in Progress');
                 return;
              end
-             if isprop(app,'selectedXiStep') && ~isempty(app.selectedXiStep)
-                xiRaw = app.selectedXiStep;
-            else
-                xiRaw = app.XiKnotsDrop.Value;
-            end
-            % empty/prompt?
-            if (isstring(xiRaw) && strlength(xiRaw)==0) || isempty(xiRaw)
-                uialert(app.UIFigure,'Please choose ξ step size.','Missing input');
-                return
-            end
-            % normalize to numeric
-            if isstring(xiRaw) || ischar(xiRaw)
-                xiStep = str2double(string(xiRaw));
-            else
-                xiStep = xiRaw;
-            end
-            if isnan(xiStep) || xiStep <= 0
-                uialert(app.UIFigure,'Please choose ξ step size.','Invalid input');
-                return
-            end
-        
-            % ---- read c step ----
-            if isprop(app,'selectedCStep') && ~isempty(app.selectedCStep)
-                cRaw = app.selectedCStep;
-            else
-                cRaw = app.CKnotsDrop.Value;
-            end
-            if (isstring(cRaw) && strlength(cRaw)==0) || isempty(cRaw)
-                uialert(app.UIFigure,'Please choose a c step size.','Missing input');
-                return
-            end
-            if isstring(cRaw) || ischar(cRaw)
-                cStep = str2double(string(cRaw));
-            else
-                cStep = cRaw;
-            end
-            if isnan(cStep) || cStep <= 0
-                uialert(app.UIFigure,'Please choose c step size.','Invalid input');
-                return
-            end
+            
+            app.IsComputing = true;
+           
+            %reset xi, c and tip in IDP tab to default
+            app.XiIDPField.Value = str2double(sprintf('%.2f', 0));
+            app.CIDPField.Value = str2double(sprintf('%.2f', 0));
+            if isvalid(app.IDPTipLbl)
+                app.IDPTipLbl.Text = sprintf( [...
+                'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.']);
 
+            end
+            %reset xi, c and tip in Direct tab
 
-            if ~app.haveStates() || ~app.haveParams()
-                uialert(app.UIFigure,'Load both MAT files first.','Missing Data');
-                return
+            app.XiDirectField.Value = str2double(sprintf('%.2f', 0));
+            app.CDirectField.Value = str2double(sprintf('%.2f', 0));
+
+            if isvalid(app.DirectTipLbl)
+                app.DirectTipLbl.Text = sprintf([ ...
+                    'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.']);
+            end
+    
+            % clear any prior inverse or direct problem results
+            app.idpSol = struct();  
+            app.ODESol = struct();   
+         
+            try
+                 % Clear the embedded plotting area before starting a new compute
+                 if isempty(app.selectedXiStep) || isempty(app.selectedCStep)
+                    uialert(app.UIFigure,'Please choose both ξ and c step sizes.','Missing input');
+                    return;
+                 end
+                 if isprop(app,'selectedXiStep') && ~isempty(app.selectedXiStep)
+                    xiRaw = app.selectedXiStep;
+                else
+                    xiRaw = app.XiKnotsDrop.Value;
+                end
+                % empty/prompt?
+                if (isstring(xiRaw) && strlength(xiRaw)==0) || isempty(xiRaw)
+                    uialert(app.UIFigure,'Please choose ξ step size.','Missing input');
+                    return
+                end
+                % normalize to numeric
+                if isstring(xiRaw) || ischar(xiRaw)
+                    xiStep = str2double(string(xiRaw));
+                else
+                    xiStep = xiRaw;
+                end
+                if isnan(xiStep) || xiStep <= 0
+                    uialert(app.UIFigure,'Please choose ξ step size.','Invalid input');
+                    return
+                end
+            
+                % ---- read c step ----
+                if isprop(app,'selectedCStep') && ~isempty(app.selectedCStep)
+                    cRaw = app.selectedCStep;
+                else
+                    cRaw = app.CKnotsDrop.Value;
+                end
+                if (isstring(cRaw) && strlength(cRaw)==0) || isempty(cRaw)
+                    uialert(app.UIFigure,'Please choose a c step size.','Missing input');
+                    return
+                end
+                if isstring(cRaw) || ischar(cRaw)
+                    cStep = str2double(string(cRaw));
+                else
+                    cStep = cRaw;
+                end
+                if isnan(cStep) || cStep <= 0
+                    uialert(app.UIFigure,'Please choose c step size.','Invalid input');
+                    return
+                end
+    
+    
+                if ~app.haveStates() || ~app.haveParams()
+                    uialert(app.UIFigure,'Load both MAT files first.','Missing Data');
+                    return
+                end
+                try
+                    xiStep = app.selectedXiStep; 
+                    cStep  = app.selectedCStep;
+                    
+                    xi_list = 0      : xiStep : 1;
+                    c_list  = -0.25  : cStep  : 0.25;
+    
+    
+                    try
+                        seirsvbh.simulator.helpers.checkInputParams(xi_list, c_list);
+                    catch ME
+                        error("Input parameter check failed: " + ME.message);
+                    end
+    
+                    app.validateH();
+                    psiFunc    = app.resolvePsi(app.PsiIDPDrop.Value); % any ψ; default ok
+                    maxWorkers = str2double(app.WorkersDrop.Value);
+                    parallelMode = 'ii';
+                    RD = app.getReportedData();
+    
+                    app.logMsg(sprintf('Computing relative errors on grid %dx%d (ξ=%.3g, c=%.3g)...', numel(xi_list), numel(c_list), xiStep, cStep));
+                    
+    
+                    tComp = tic;
+                    [l2mat, linfmat, usedParallel, nWorkersUsed] = ...
+                        seirsvbh.simulator.functions.computeRelativeErrorsParallel(xi_list, c_list, app.h, psiFunc, RD, maxWorkers, parallelMode);
+                    app.logMsg(sprintf('usedParallel=%d, nWorkersUsed=%d, elapsed=%.2fs', usedParallel, nWorkersUsed, toc(tComp)));
+                        
+                    seirsvbh.simulator.functions.saveRelativeErrors(xi_list, c_list, l2mat, linfmat, app.matFile);
+                    app.logMsg(sprintf('Saved results to "%s".', app.matFile));
+    
+                    out = evalc('seirsvbh.simulator.functions.summarizeRelativeErrorsFromMat(app.matFile);');
+    
+                    app.logMsg(sprintf('Summary of relative errors for grid %dx%d (ξ=%.3g, c=%.3g):', numel(xi_list), numel(c_list), xiStep, cStep));
+                    % Split the summary output into lines and log them without timestamps
+                    lines = regexp(out,'\r?\n','split');
+                    for k = 1:numel(lines)
+                        L = strtrim(lines{k});
+                        if ~isempty(L)
+                            app.logPlain(L); %no timestamp
+                        end
+                    end
+                    
+                    app.logMsg('Computing relative errors completed successfully.');
+    
+                    
+                    [xiMinL2, cMinL2, ~, ~, ~, ~] = seirsvbh.simulator.functions.summarizeRelativeErrorsFromMat(app.matFile, 0, true);
+                    
+                    % persist computed minima in the app state
+                    app.xiMin = xiMinL2;
+                    app.cMin = cMinL2;
+    
+                    %update xi and c in IDP tab
+                    app.XiIDPField.Value = str2double(sprintf('%.2f', app.xiMin));
+                    app.CIDPField.Value = str2double(sprintf('%.2f', app.cMin));
+                    
+                    % Update the IDP tip label dynamically
+                    if isvalid(app.IDPTipLbl)
+                        app.IDPTipLbl.Text = sprintf( ...
+                            'Tip: ξ and c here are pre-filled from Relative Errors minima (where the l₂ and l∞ errors reach their minimum): ξ = %.2f and c = %.2f.', ...
+                            app.xiMin, app.cMin);
+                    end
+               
+    
+                    %update xi and c in Direct tab
+    
+                    app.XiDirectField.Value = str2double(sprintf('%.2f', app.xiMin));
+                    app.CDirectField.Value = str2double(sprintf('%.2f', app.cMin));
+
+                  
+                    % --- Update the Direct Problem tip label dynamically ---
+                    if isvalid(app.DirectTipLbl)
+                        app.DirectTipLbl.Text = sprintf([ ...
+                            'Tip: The values of ξ and c are pre-filled from the Relative Errors minima (where the l₂ and l∞ errors reach their minimum): ξ = %.2f and c = %.2f. ', ...
+                            'The direct solver uses the parameter values ', ...
+                            'obtained from the inverse problem solution in the "Solve and Plot Inverse Data Problem" tab.'], ...
+                            app.xiMin, app.cMin);
+                    end
+    
+                    app.logMsg('ξ and c fields have been updated across all tabs using the computed relative error minima. You can proceed with solving the Inverse Data Problem.');
+    
+    
+                catch ME
+                    uialert(app.UIFigure, ME.message, 'Compute Error');
+                    app.logMsg(['Compute Error: ' ME.message]);
+                end
+            catch ME
+                app.IsComputing = false;   % ensure OFF on error
+                % Re-enable  buttons and controls on error   
+                app.markResultsFresh(); 
+                rethrow(ME);
+             end
+
+            app.IsComputing = false;
+            app.markResultsFresh();    % after success
+        end
+
+        function safeEnable(app, h, state)
+            % Helper: safely enable/disable a UI component
+            if isempty(h)
+                return;
             end
             try
-                xiStep = app.selectedXiStep; 
-                cStep  = app.selectedCStep;
-                
-                xi_list = 0      : xiStep : 1;
-                c_list  = -0.25  : cStep  : 0.25;
-
-
-                try
-                    seirsvbh.simulator.helpers.checkInputParams(xi_list, c_list);
-                catch ME
-                    error("Input parameter check failed: " + ME.message);
+                if isvalid(h)
+                    h.Enable = state;
                 end
-
-                app.validateH();
-                psiFunc    = app.resolvePsi(app.PsiIDPDrop.Value); % any ψ; default ok
-                maxWorkers = str2double(app.WorkersDrop.Value);
-                parallelMode = 'ii';
-                RD = app.getReportedData();
-
-                app.logMsg(sprintf('Computing relative errors on grid %dx%d (ξ=%.3g, c=%.3g)...', numel(xi_list), numel(c_list), xiStep, cStep));
-
-
-                tComp = tic;
-                [l2mat, linfmat, usedParallel, nWorkersUsed] = ...
-                    seirsvbh.simulator.functions.computeRelativeErrorsParallel(xi_list, c_list, app.h, psiFunc, RD, maxWorkers, parallelMode);
-                app.logMsg(sprintf('usedParallel=%d, nWorkersUsed=%d, elapsed=%.2fs', usedParallel, nWorkersUsed, toc(tComp)));
-                    
-                seirsvbh.simulator.functions.saveRelativeErrors(xi_list, c_list, l2mat, linfmat, app.matFile);
-                app.logMsg(sprintf('Saved results to "%s".', app.matFile));
-
-                out = evalc('seirsvbh.simulator.functions.summarizeRelativeErrorsFromMat(app.matFile);');
-
-                app.logMsg(sprintf('Summary of relative errors for grid %dx%d (ξ=%.3g, c=%.3g):', numel(xi_list), numel(c_list), xiStep, cStep));
-                % Split the summary output into lines and log them without timestamps
-                lines = regexp(out,'\r?\n','split');
-                for k = 1:numel(lines)
-                    L = strtrim(lines{k});
-                    if ~isempty(L)
-                        app.logPlain(L); %no timestamp
-                    end
-                end
-                
-                app.logMsg('Computing relative errors completed successfully.');
-
-            
-            catch ME
-                uialert(app.UIFigure, ME.message, 'Compute Error');
-                app.logMsg(['Compute Error: ' ME.message]);
+            catch
+                % ignore invalid handles or timing issues
             end
-        end
+         end
 
         function onPlotRelErr(app, varargin)
             if ~isfile(app.matFile)
                 uialert(app.UIFigure, sprintf('"%s" not found. Compute first.', app.matFile), 'Missing results.mat');
                 app.logMsg('Plot aborted: results.mat not found.');
                 return
+            end
+            % Prevent plotting while computation is still running
+            if isprop(app,'IsComputing') && app.IsComputing
+                uialert(app.UIFigure, ...
+                    'Please wait - relative error computation is still running. You can switch tabs after it completes.', ...
+                    'Computation in Progress');
+                return;
             end
 
             % read relative-error plot choice
@@ -741,7 +845,12 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 uialert(app.UIFigure,'Load both MAT files first.','Missing Data');
                 return
             end
-        
+            if ~app.hasFreshResults
+                uialert(app.UIFigure, ...
+                   'Please compute Relative Errors first for this session. Old results are not used automatically.', ...
+                   'Fresh Results Required');
+                return;
+            end
             try
                 % Read / validate xi, c
                 xi = app.XiIDPField.Value;
@@ -912,6 +1021,12 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         % Direct (show external figs at given size)
         function onSolveDirect(app)
             % Solve the Direct problem ONLY. No plotting here.
+            if ~app.hasFreshResults
+                uialert(app.UIFigure, ...
+                   'Please compute Relative Errors first for this session. Old results are not used automatically.', ...
+                   'Fresh Results Required');
+                return;
+            end
         
             try
                 % Read inputs
@@ -1370,13 +1485,24 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             lblXi = uilabel(app.IDPGrid,'Text','ξ [0,1]:','HorizontalAlignment','right','Tag','IDP_lblXi');
             lblXi.Layout.Row = 1;  lblXi.Layout.Column = 1;
         
-            app.XiIDPField = uieditfield(app.IDPGrid,'numeric','Limits',[0 1],'Value',0.41,'Tag','IDP_XiField');
+            app.XiIDPField = uieditfield(app.IDPGrid,'numeric', ...
+                'Limits',[0 1], ...
+                'Value',0, ...
+                'Editable','off', ...
+                'Tooltip','This value updates automatically after computing minima', ...
+                'Tag','IDP_XiField');                    
             app.XiIDPField.Layout.Row = 1;  app.XiIDPField.Layout.Column = 2;
         
             lblC = uilabel(app.IDPGrid,'Text','c [-0.25,0.25]:','HorizontalAlignment','right','Tag','IDP_lblC');
             lblC.Layout.Row = 1;  lblC.Layout.Column = 3;
-        
-            app.CIDPField  = uieditfield(app.IDPGrid,'numeric','Limits',[-0.25 0.25],'Value',-0.005,'Tag','IDP_CField');
+            
+            app.CIDPField = uieditfield(app.IDPGrid,'numeric', ...
+                'Limits',[-0.25 0.25], ...
+                'Value',0, ...                         
+                'Editable','off', ...                  
+                'Tooltip','This value updates automatically after computing minima', ...
+                'Tag','IDP_CField');
+
             app.CIDPField.Layout.Row = 1;  app.CIDPField.Layout.Column = 4;
         
             lblPsi = uilabel(app.IDPGrid,'Text','ψ:','HorizontalAlignment','right','Tag','IDP_lblPsi');
@@ -1416,9 +1542,10 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         
             % Row 3: Tip text
             app.IDPTipLbl = uilabel(app.IDPGrid, ...
-                'Text', ['Tip: ξ and c here are already pre-filled from Relative Errors minima: 0.41 and -0.005. ' ...
-                         'Edit ξ and c to try other values.'], ...
-                'HorizontalAlignment','left','WordWrap','on','Tag','IDP_Tip');
+                'Text', 'Tip: ξ and c will be updated automatically once Relative Errors minima are computed.', ...
+                'HorizontalAlignment', 'left', ...
+                'WordWrap', 'on', ...
+                'Tag', 'IDP_Tip');
             app.IDPTipLbl.Layout.Row = 3;  
             app.IDPTipLbl.Layout.Column = [1 8];
         
@@ -1445,13 +1572,23 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             lblXiD = uilabel(app.DirectGrid,'Text','ξ [0,1]:','HorizontalAlignment','right','Tag','D_lblXi');
             lblXiD.Layout.Row = 1;  lblXiD.Layout.Column = 1;
         
-            app.XiDirectField = uieditfield(app.DirectGrid,'numeric','Limits',[0 1],'Value',0.41,'Tag','D_XiField');
+            app.XiDirectField = uieditfield(app.DirectGrid,'numeric', ...
+                'Limits',[0 1], ...
+                'Value',0, ...
+                'Editable','off', ...
+                'Tooltip','This value updates automatically after computing minima', ...
+                'Tag','D_XiField'); 
             app.XiDirectField.Layout.Row = 1;  app.XiDirectField.Layout.Column = 2;   
         
             lblCD = uilabel(app.DirectGrid,'Text','c [-0.25,0.25]:','HorizontalAlignment','right','Tag','D_lblC');
             lblCD.Layout.Row = 1;  lblCD.Layout.Column = 3;
         
-            app.CDirectField  = uieditfield(app.DirectGrid,'numeric','Limits',[-0.25 0.25],'Value',-0.005,'Tag','D_CField');
+            app.CDirectField  = uieditfield(app.DirectGrid,'numeric', ...
+                'Limits',[-0.25 0.25], ...
+                'Value',0, ...
+                'Editable','off', ...
+                'Tooltip','This value updates automatically after computing minima', ...
+                'Tag','D_CField'); 
             app.CDirectField.Layout.Row = 1;  app.CDirectField.Layout.Column = 4;   
         
             lblPsiD = uilabel(app.DirectGrid,'Text','ψ:','HorizontalAlignment','right','Tag','D_lblPsi');
@@ -1496,10 +1633,11 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         
             % Row  3
             app.DirectTipLbl = uilabel(app.DirectGrid, ...
-            'Text', ['Tip: The values of ξ and c are pre-filled from the Relative Errors minima (0.41 and -0.005). ' ...
-                     'Edit ξ and c to try other values. The direct solver uses the parameter values calculated ' ...
-                     'by the inverse problem solver in the "Solve and Plot Inverse Data Problem" tab.'], ...
-            'HorizontalAlignment','left','WordWrap','on','Tag','D_Tip');
+                'Text', ['Tip: ξ and c will be automatically updated once Relative Errors minima are computed. '], ...
+                'HorizontalAlignment','left', ...
+                'WordWrap','on', ...
+                'Tag','D_Tip');
+
             app.DirectTipLbl.Layout.Row = 3;  app.DirectTipLbl.Layout.Column = [1 8];
         
             dirDummy = uilabel(app.DirectGrid,'Text','','Tag','D_Dummy');
@@ -1564,8 +1702,44 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             app.UIFigure.SizeChangedFcn = @(~,~) app.reflowUI();
             drawnow; 
             app.reflowUI();
+
+            app.invalidateResults();   % ignore any old results.mat by default
         end
         
+        function invalidateResults(app)
+            app.hasFreshResults = false;
+            if isvalid(app.PlotRelErrBtn),      app.PlotRelErrBtn.Enable = 'off'; end
+            if isvalid(app.WorkersDrop),        app.WorkersDrop.Enable = 'off'; end
+            if isvalid(app.RelPlotChoice),      app.RelPlotChoice.Enable = 'off'; end
+            if isvalid(app.PsiIDPDrop),         app.PsiIDPDrop.Enable = 'off'; end
+            if isvalid(app.ParamPlotDrop),      app.ParamPlotDrop.Enable = 'off'; end
+            if isvalid(app.SolveIDPBtn),        app.SolveIDPBtn.Enable = 'off'; end
+            if isvalid(app.PlotParamBtn),       app.PlotParamBtn.Enable = 'off'; end
+            if isvalid(app.PsiDirectDrop),      app.PsiDirectDrop.Enable = 'off'; end
+            if isvalid(app.DirectPlotDrop),     app.DirectPlotDrop.Enable = 'off'; end
+            if isvalid(app.SolveDirectBtn),     app.SolveDirectBtn.Enable = 'off'; end
+            if isvalid(app.PlotDirectBtn),      app.PlotDirectBtn.Enable = 'off'; end
+        end
+
+        function markResultsFresh(app)
+            app.hasFreshResults = true;
+            if isvalid(app.ComputeBtn),         app.ComputeBtn.Enable = 'on'; end
+            if isvalid(app.PlotRelErrBtn),      app.PlotRelErrBtn.Enable = 'on'; end
+            if isvalid(app.XiKnotsDrop),        app.XiKnotsDrop.Enable = 'on'; end
+            if isvalid(app.CKnotsDrop),         app.CKnotsDrop.Enable = 'on'; end
+            if isvalid(app.WorkersDrop),        app.WorkersDrop.Enable = 'on'; end
+            if isvalid(app.RelPlotChoice),      app.RelPlotChoice.Enable = 'on'; end
+            if isvalid(app.PsiIDPDrop),         app.PsiIDPDrop.Enable = 'on'; end
+            if isvalid(app.ParamPlotDrop),      app.ParamPlotDrop.Enable = 'on'; end
+            if isvalid(app.SolveIDPBtn),        app.SolveIDPBtn.Enable = 'on'; end
+            if isvalid(app.PlotParamBtn),       app.PlotParamBtn.Enable = 'on'; end
+            if isvalid(app.PsiDirectDrop),      app.PsiDirectDrop.Enable = 'on'; end
+            if isvalid(app.DirectPlotDrop),     app.DirectPlotDrop.Enable = 'on'; end
+            if isvalid(app.SolveDirectBtn),     app.SolveDirectBtn.Enable = 'on'; end
+            if isvalid(app.PlotDirectBtn),      app.PlotDirectBtn.Enable = 'on'; end
+        end
+
+
         function reflowUI(app)
             pos = app.UIFigure.Position;
             w = pos(3); h = pos(4);
