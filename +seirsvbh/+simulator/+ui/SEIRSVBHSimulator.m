@@ -432,40 +432,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         % Relative Error 
         function onComputeRelErr(app, varargin)
                
-             app.invalidateResults();   % clear freshness for this session
-
-             % Prevent starting another computation if one is already running
-             if app.IsComputing
-                uialert(app.UIFigure, ...
-                    'A relative error computation is already running. Please wait until it completes.', ...
-                    'Computation in Progress');
-                return;
-             end
-            
-            app.IsComputing = true;
-           
-            %reset xi, c and tip in IDP tab to default
-            app.XiIDPField.Value = str2double(sprintf('%.2f', 0));
-            app.CIDPField.Value = str2double(sprintf('%.2f', 0));
-            if isvalid(app.IDPTipLbl)
-                app.IDPTipLbl.Text = sprintf( ...
-                'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.');
-
-            end
-            %reset xi, c and tip in Direct tab
-
-            app.XiDirectField.Value = str2double(sprintf('%.2f', 0));
-            app.CDirectField.Value = str2double(sprintf('%.2f', 0));
-
-            if isvalid(app.DirectTipLbl)
-                app.DirectTipLbl.Text = sprintf( ...
-                    'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.');
-            end
-    
-            % clear any prior inverse or direct problem results
-            app.idpSol = struct();  
-            app.ODESol = struct();   
-         
             try
                  % Clear the embedded plotting area before starting a new compute
                  if isempty(app.selectedXiStep) || isempty(app.selectedCStep)
@@ -516,7 +482,43 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                     uialert(app.UIFigure,'Load both MAT files first.','Missing Data');
                     return
                 end
+                
+                %xi and c are selected, so we proceed further
 
+                app.invalidateResults();   % clear freshness for this session
+
+                % Prevent starting another computation if one is already running
+                if app.IsComputing
+                    uialert(app.UIFigure, ...
+                        'A relative error computation is already running. Please wait until it completes.', ...
+                        'Computation in Progress');
+                    return;
+                 end
+                
+                app.IsComputing = true;
+
+                %reset xi, c and tip in IDP tab to default
+                app.XiIDPField.Value = str2double(sprintf('%.2f', 0));
+                app.CIDPField.Value = str2double(sprintf('%.2f', 0));
+                if isvalid(app.IDPTipLbl)
+                    app.IDPTipLbl.Text = sprintf( ...
+                    'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.');
+    
+                end
+                %reset xi, c and tip in Direct tab
+    
+                app.XiDirectField.Value = str2double(sprintf('%.2f', 0));
+                app.CDirectField.Value = str2double(sprintf('%.2f', 0));
+    
+                if isvalid(app.DirectTipLbl)
+                    app.DirectTipLbl.Text = sprintf( ...
+                        'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.');
+                end
+        
+                % clear any prior inverse or direct problem results
+                app.idpSol = struct();  
+                app.ODESol = struct();   
+         
                 try
                     xiStep = app.selectedXiStep; 
                     cStep  = app.selectedCStep;
