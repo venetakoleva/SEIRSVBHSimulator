@@ -17,7 +17,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
     % SEIRSVBHSimulator
     % UI for:
     %   1) Compute & plot relative errors (l2, linf) over (xi, c)
-    %   2) Solve & plot the Inverse Data Problem (IDP)
+    %   2) Solve & plot the Inverse Problem (IDP)
     %   3) Solve & plot the Direct problem
 
     %% ==== UI HANDLES ====
@@ -202,22 +202,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 end
 
             elseif oldTab == app.RelErrTab
-                % % Reset dropdowns to the prompt
-                % try
-                %     app.XiKnotsDrop.Value = "";     
-                % catch
-                %     app.XiKnotsDrop.Value = "Choose ξ";
-                % end
-                % try
-                %     app.CKnotsDrop.Value = "";       
-                % catch
-                %     app.CKnotsDrop.Value = "Choose c";
-                % end
-                % 
-                % if isprop(app,'selectedXiStep'), app.selectedXiStep = ""; end   
-                % if isprop(app,'selectedCStep'),  app.selectedCStep  = ""; end  
-
-
+               
                 % Reset rel err plot-type prompt
                 if ~isempty(app.RelPlotChoice) && isvalid(app.RelPlotChoice)
                     app.RelPlotChoice.Value = "";    
@@ -227,10 +212,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 end
             end
             app.showDefaultEmbedded(ev.NewValue);
-            %  % Track previous tab
-            % if isprop(app,'PreviousTab')
-            %     app.PreviousTab = newTab;
-            % end
         end
 
         function updateDataStatus(app)
@@ -285,7 +266,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         "Then choose plot type and press “Plot Relative Errors”." ...
                     ];
         
-                case "Solve and Plot Inverse Data Problem"
+                case "Solve and Plot Inverse Problem"
                     lines = [ ...
                         "Solve Inverse Problem.", ...
                         "Then choose a parameter and press “Plot Parameter”." ...
@@ -467,8 +448,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             app.XiIDPField.Value = str2double(sprintf('%.2f', 0));
             app.CIDPField.Value = str2double(sprintf('%.2f', 0));
             if isvalid(app.IDPTipLbl)
-                app.IDPTipLbl.Text = sprintf( [...
-                'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.']);
+                app.IDPTipLbl.Text = sprintf( ...
+                'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.');
 
             end
             %reset xi, c and tip in Direct tab
@@ -477,8 +458,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             app.CDirectField.Value = str2double(sprintf('%.2f', 0));
 
             if isvalid(app.DirectTipLbl)
-                app.DirectTipLbl.Text = sprintf([ ...
-                    'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.']);
+                app.DirectTipLbl.Text = sprintf( ...
+                    'Tip: ξ and c will be automatically updated once Relative Errors minima are computed.');
             end
     
             % clear any prior inverse or direct problem results
@@ -531,20 +512,18 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                     uialert(app.UIFigure,'Please choose c step size.','Invalid input');
                     return
                 end
-    
-    
                 if ~app.haveStates() || ~app.haveParams()
                     uialert(app.UIFigure,'Load both MAT files first.','Missing Data');
                     return
                 end
+
                 try
                     xiStep = app.selectedXiStep; 
                     cStep  = app.selectedCStep;
                     
                     xi_list = 0      : xiStep : 1;
                     c_list  = -0.25  : cStep  : 0.25;
-    
-    
+
                     try
                         seirsvbh.simulator.helpers.checkInputParams(xi_list, c_list);
                     catch ME
@@ -557,9 +536,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                     parallelMode = 'ii';
                     RD = app.getReportedData();
     
-                    app.logMsg(sprintf('Computing relative errors on grid %dx%d (ξ=%.3g, c=%.3g)...', numel(xi_list), numel(c_list), xiStep, cStep));
+                    app.logMsg(sprintf('Computing relative errors on grid %dx%d (ξ=%.3g, c=%.3g) started...', numel(xi_list), numel(c_list), xiStep, cStep));
                     
-    
                     tComp = tic;
                     [l2mat, linfmat, usedParallel, nWorkersUsed] = ...
                         seirsvbh.simulator.functions.computeRelativeErrorsParallel(xi_list, c_list, app.h, psiFunc, RD, maxWorkers, parallelMode);
@@ -582,7 +560,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                     
                     app.logMsg('Computing relative errors completed successfully.');
     
-                    
                     [xiMinL2, cMinL2, ~, ~, ~, ~] = seirsvbh.simulator.functions.summarizeRelativeErrorsFromMat(app.matFile, 0, true);
                     
                     % persist computed minima in the app state
@@ -590,39 +567,37 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                     app.cMin = cMinL2;
     
                     %update xi and c in IDP tab
-                    app.XiIDPField.Value = str2double(sprintf('%.2f', app.xiMin));
-                    app.CIDPField.Value = str2double(sprintf('%.2f', app.cMin));
+                    app.XiIDPField.Value = str2double(sprintf('%.3f', app.xiMin));
+                    app.CIDPField.Value = str2double(sprintf('%.3f', app.cMin));
                     
                     % Update the IDP tip label dynamically
                     if isvalid(app.IDPTipLbl)
                         app.IDPTipLbl.Text = sprintf( ...
-                            'Tip: ξ and c here are pre-filled from Relative Errors minima (where the l₂ and l∞ errors reach their minimum): ξ = %.2f and c = %.2f.', ...
+                            'Tip:The values of ξ and c are pre-filled from Relative Errors minima (where the l₂ and l∞ relative errors reach their minimum): ξ = %.3f and c = %.3f.', ...
                             app.xiMin, app.cMin);
                     end
-               
-    
+
                     %update xi and c in Direct tab
-    
-                    app.XiDirectField.Value = str2double(sprintf('%.2f', app.xiMin));
-                    app.CDirectField.Value = str2double(sprintf('%.2f', app.cMin));
+                    app.XiDirectField.Value = str2double(sprintf('%.3f', app.xiMin));
+                    app.CDirectField.Value = str2double(sprintf('%.3f', app.cMin));
 
                   
                     % --- Update the Direct Problem tip label dynamically ---
                     if isvalid(app.DirectTipLbl)
                         app.DirectTipLbl.Text = sprintf([ ...
-                            'Tip: The values of ξ and c are pre-filled from the Relative Errors minima (where the l₂ and l∞ errors reach their minimum): ξ = %.2f and c = %.2f. ', ...
+                            'Tip: The values of ξ and c are pre-filled from the Relative Errors minima (where the l₂ and l∞ relative errors reach their minimum): ξ = %.3f and c = %.3f. ', ...
                             'The direct solver uses the parameter values ', ...
-                            'obtained from the inverse problem solution in the "Solve and Plot Inverse Data Problem" tab.'], ...
+                            'obtained from the inverse problem solution in the "Solve and Plot Inverse Problem" tab.'], ...
                             app.xiMin, app.cMin);
                     end
     
-                    app.logMsg('ξ and c fields have been updated across all tabs using the computed relative error minima. You can proceed with solving the Inverse Data Problem.');
-    
-    
+                    app.logMsg('ξ and c fields have been updated across all tabs using the computed relative error minima. You can proceed with solving the Inverse Problem.');
+                
                 catch ME
                     uialert(app.UIFigure, ME.message, 'Compute Error');
                     app.logMsg(['Compute Error: ' ME.message]);
                 end
+
             catch ME
                 app.IsComputing = false;   % ensure OFF on error
                 % Re-enable  buttons and controls on error   
@@ -698,7 +673,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 app.Ax.LabelFontSizeMultiplier = 1;
                 
                 switch choice
-                    case {'Contour Plot l2 Error', 'l2-contour'}
+                    case {'Contour Plot l₂ Error', 'l2-contour'}
                         view(app.Ax, 2);                 % 2-D axes
                         app.Ax.ZLimMode = 'auto';
                         app.Ax.CLimMode = 'auto';
@@ -712,7 +687,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         cb.TickLabelInterpreter = 'latex';
                         cb.Label.Interpreter = 'latex';
                 
-                        title(app.Ax,'Contour of $\ell_2$ Relative Error', ...
+                        title(app.Ax,'Contour Plot of Relative Error $(\ell_2, \xi, c)$', ...
                             'Interpreter','latex','FontSize',16);
                         xlabel(app.Ax,'$\xi$','Interpreter','latex','FontSize',16);
                         ylabel(app.Ax,'$c$','Interpreter','latex','FontSize',16);
@@ -720,7 +695,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         axis(app.Ax,'tight');
                         app.Ax.Layer = 'top';
                 
-                    case {'Contour Plot linf Error', 'linf-contour'}
+                    case {'Contour Plot l∞ Error', 'linf-contour'}
                         view(app.Ax, 2);
                         app.Ax.ZLimMode = 'auto';
                         app.Ax.CLimMode = 'auto';
@@ -733,7 +708,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         cb.TickLabelInterpreter = 'latex';
                         cb.Label.Interpreter = 'latex';
                 
-                        title(app.Ax,'Contour of $\ell_\infty$ Relative Error', ...
+                        title(app.Ax,'Contour Plot of Relative Error $(\ell_\infty, \xi, c)$', ...
                             'Interpreter','latex','FontSize',16);
                         xlabel(app.Ax,'$\xi$','Interpreter','latex','FontSize',16);
                         ylabel(app.Ax,'$c$','Interpreter','latex','FontSize',16);
@@ -741,7 +716,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         axis(app.Ax,'tight');
                         app.Ax.Layer = 'top';
                 
-                    case {'Surface Plot l2 Error', 'l2-surface'}
+                    case {'Surface Plot l₂ Error', 'l2-surface'}
                         Z = S.l2mat;
                 
                         view(app.Ax, 3);
@@ -755,8 +730,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 
                         % Z label in LaTeX, consistent size
                         app.Ax.ZLabel.Interpreter = 'latex';
-                        app.Ax.ZLabel.String      = '$\ell_2$';
-                        app.Ax.ZLabel.FontSize    = 16;
+                        app.Ax.ZLabel.String      = '$Error(\ell_2, \xi, c)$';
+                        app.Ax.ZLabel.FontSize    = 14;
                 
                         % Plot
                         colormap(app.Ax, parula);
@@ -782,12 +757,12 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         cb.TickLabelInterpreter = 'latex';
                         cb.Label.Interpreter = 'latex';
                 
-                        title(app.Ax,'Surface of $\ell_2$ Relative Error', ...
+                        title(app.Ax,'Surface Plot of Relative Error $(\ell_2, \xi, c)$', ...
                             'Interpreter','latex','FontSize',16);
                         xlabel(app.Ax,'$\xi$','Interpreter','latex','FontSize',16);
                         ylabel(app.Ax,'$c$','Interpreter','latex','FontSize',16);
                 
-                    case {'Surface Plot linf Error', 'linf-surface'}
+                    case {'Surface Plot l∞ Error', 'linf-surface'}
                         Z = S.linfmat;
                 
                         view(app.Ax, 3);
@@ -799,8 +774,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         app.Ax.CLimMode        = 'auto';
                 
                         app.Ax.ZLabel.Interpreter = 'latex';
-                        app.Ax.ZLabel.String      = '$\ell_\infty$';
-                        app.Ax.ZLabel.FontSize    = 16;
+                        app.Ax.ZLabel.String      = '$Error(\ell_{\infty}, \xi, c)$';
+                        app.Ax.ZLabel.FontSize    = 14;
                 
                         colormap(app.Ax, parula);
                         surf(app.Ax, Xi, C, Z, 'EdgeColor','none');
@@ -823,7 +798,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                         cb.TickLabelInterpreter = 'latex';
                         cb.Label.Interpreter = 'latex';
                 
-                        title(app.Ax,'Surface of $\ell_\infty$ Relative Error', ...
+                        title(app.Ax,'Surface Plot of Relative Error $(\ell_\infty, \xi, c)$', ...
                             'Interpreter','latex','FontSize',16);
                         xlabel(app.Ax,'$\xi$','Interpreter','latex','FontSize',16);
                         ylabel(app.Ax,'$c$','Interpreter','latex','FontSize',16);
@@ -868,10 +843,10 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 RD      = app.getReportedData();
         
                 % Solve only (no plotting here)
-                app.logMsg(sprintf('Solving IDP with ξ=%.5g, c=%.5g, psi=%s...', xi, c, func2str(psiFunc)));
+                app.logMsg(sprintf('Solving the Inverse Problem with ξ=%.5g, c=%.5g, psi=%s...', xi, c, func2str(psiFunc)));
                 tComp = tic;
                 app.idpSol = seirsvbh.simulator.functions.IDPSolver(xi, app.h, c, psiFunc, RD);
-                app.logMsg(sprintf('IDP solved in %.2f s. Use "Plot Parameter" to visualize.', toc(tComp)));
+                app.logMsg(sprintf('Inverse Problem solved in %.2f s. Use "Plot Parameter" to visualize.', toc(tComp)));
         
                % Reset embedded axes to a neutral state with a hint
                 cla(app.Ax,'reset'); 
@@ -883,7 +858,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             catch ME
                 rep = getReport(ME,'extended','hyperlinks','off');
                 if ismethod(app,'logPlain'), app.logPlain(rep); end
-                uialert(app.UIFigure, ME.message, 'IDP Error');
+                uialert(app.UIFigure, ME.message, 'Inverse Problem Error');
                 app.logMsg('IDP Error.');
             end
         end
@@ -946,7 +921,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 end
         
                 if isempty(y)
-                    uialert(app.UIFigure,'Selected parameter not found in IDP solution.','Missing series');
+                    uialert(app.UIFigure,'Selected parameter not found in Inverse Problem solution.','Missing series');
                     app.logMsg('Plot Parameter: series not found in idpSol.');
                     return
                 end
@@ -1016,8 +991,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             end
         end
 
-
-
         % Direct (show external figs at given size)
         function onSolveDirect(app)
             % Solve the Direct problem ONLY. No plotting here.
@@ -1047,15 +1020,13 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
          
                 if ~isstruct(app.idpSol) || isempty(fieldnames(app.idpSol))
                     uialert(app.UIFigure, ...
-                        ['The parameters from the Inverse Data Problem solution are not computed.', newline, ...
+                        ['The parameters from the Inverse Problem solution are not computed.', newline, ...
                          'Please solve the inverse data problem first in the ', ...
-                         '"Solve and Plot Inverse Data Problem" tab.'], ...
+                         '"Solve and Plot Inverse Problem" tab.'], ...
                         'IDP Required', 'Icon','error');
-                    app.logMsg('Cannot proceed: IDP solution missing.');
+                    app.logMsg('Cannot proceed: Inverse Problem solution missing.');
                     return;
                 end
-
-
 
                 % Direct solver
                 app.logMsg('Solving Direct problem...');
@@ -1300,7 +1271,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             end
         end
 
-
         % Logger
         function onCopyLog(app, varargin)
             clipboard('copy', strjoin(app.LoggerArea.Value, newline));
@@ -1310,13 +1280,11 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         function onClearLog(app)
             app.LoggerArea.Value = "";   % or {''}
         end
-
     end
 
     %% ==== UI CONSTRUCTION ====
    
     methods (Access = private)
-    
         function createComponents(app)
             % ==== Main window & root grid ====
             app.UIFigure = uifigure('Name','SEIRSVBHSimulator', ...
@@ -1391,8 +1359,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             app.RelErrGrid = uigridlayout(relInner,[10 8],'Tag','RelErrGrid');
             app.RelErrGrid.RowHeight     = {'fit','fit','fit', 1,1,1,1,1,1, 1};
             app.RelErrGrid.ColumnWidth   = {'fit','fit','fit','fit','fit','fit','fit','1x'};
-            app.RelErrGrid.RowSpacing    = 6;
-            app.RelErrGrid.ColumnSpacing = 8;
+            app.RelErrGrid.RowSpacing    = 4;
+            app.RelErrGrid.ColumnSpacing = 6;
             app.RelErrGrid.Padding       = [8 6 8 8];
         
             % Row 1:
@@ -1400,8 +1368,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             xiLbl.Layout.Row = 1; xiLbl.Layout.Column = 1;
         
             app.XiKnotsDrop = uidropdown(app.RelErrGrid, ...
-                'Items',     {'Choose ξ','0.5','0.05','0.01','0.005'}, ...
-                'ItemsData', {"",         0.5,  0.05,  0.01,  0.005}, ...
+                'Items',     {'Choose ξ','0.5','0.1','0.05','0.01','0.005'}, ...
+                'ItemsData', {"",         0.5, 0.1, 0.05,  0.01,  0.005}, ...
                 'Value', "", ...
                 'ValueChangedFcn', @(dd,ev) app.onXiKnotsChanged(ev), ...
                 'Tag','Rel_XiKnotsDrop');
@@ -1412,8 +1380,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             cLbl.Layout.Row = 1;  cLbl.Layout.Column = 3;
         
             app.CKnotsDrop = uidropdown(app.RelErrGrid, ...
-                'Items',     {'Choose c','0.25','0.1','0.05','0.005'}, ...
-                'ItemsData', {"",        0.25,   0.1,   0.05,  0.005}, ...
+                'Items',     {'Choose c','0.25','0.1','0.05','0.01','0.005'}, ...
+                'ItemsData', {"",        0.25,   0.1,   0.05, 0.01,  0.005}, ...
                 'Value', "", ...
                 'ValueChangedFcn', @(dd,ev) app.onCKnotsChanged(ev), ...
                 'Tag','Rel_CKnotsDrop');
@@ -1439,8 +1407,8 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         
             app.RelPlotChoice = uidropdown(app.RelErrGrid, ...
                 'Items',     {'Choose plot type', ...
-                              'Contour Plot l2 Error','Surface Plot l2 Error', ...
-                              'Contour Plot linf Error','Surface Plot linf Error'}, ...
+                              'Contour Plot l₂ Error','Surface Plot l₂ Error', ...
+                              'Contour Plot l∞ Error','Surface Plot l∞ Error'}, ...
                 'ItemsData', {"", ...
                               "l2-contour","l2-surface","linf-contour","linf-surface"}, ...
                 'Value', "", ...
@@ -1456,7 +1424,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         
             % Row 3: Tip
             app.ErrTipLbl = uilabel(app.RelErrGrid, ...
-                'Text','Tip: To start, choose ξ and c. Then press "Compute Relative Errors" button. ', ...
+                'Text','Tip: Choose ξ and c, optionally adjust the number of workers, then press "Compute Relative Errors".', ...
                 'HorizontalAlignment','left','WordWrap','on','Tag','Rel_TipLbl');
             app.ErrTipLbl.Layout.Row = 3;  
             app.ErrTipLbl.Layout.Column = [1 8];
@@ -1466,7 +1434,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             relDummy.Layout.Row = 10; relDummy.Layout.Column = 1;
         
             % === IDP Tab ===
-            app.IDPTab  = uitab(app.Tabs,'Title','Solve and Plot Inverse Data Problem','Scrollable','off');
+            app.IDPTab  = uitab(app.Tabs,'Title','Solve and Plot Inverse Problem','Scrollable','off');
             idpTabGrid = uigridlayout(app.IDPTab,[1 1],'Padding',[0 0 0 0],'RowHeight',{'1x'},'ColumnWidth',{'1x'});
             idpScroll  = uipanel(idpTabGrid,'BorderType','none','Scrollable','on','AutoResizeChildren','off');
             idpScroll.Layout.Row = 1; idpScroll.Layout.Column = 1;
@@ -1476,9 +1444,9 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         
             app.IDPGrid = uigridlayout(idpInner,[10 8],'Tag','IDPGrid');
             app.IDPGrid.RowHeight   = {'fit','fit','fit', 1,1,1,1,1,1, 1};
-            app.IDPGrid.ColumnWidth = {80, 70, 90, 70, 30, 100, 130, '1x'};
+            app.IDPGrid.ColumnWidth = {80, 70, 90, 70, 30, 90, 120, '1x'};
             app.IDPGrid.RowSpacing    = 4;
-            app.IDPGrid.ColumnSpacing = 8;
+            app.IDPGrid.ColumnSpacing = 2;
             app.IDPGrid.Padding       = [8 6 8 8];
         
             %  Row 1
@@ -1563,9 +1531,9 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         
             app.DirectGrid = uigridlayout(dirInner,[10 8],'Tag','DirectGrid');
             app.DirectGrid.RowHeight     = {'fit','fit','fit', 1,1,1,1,1,1, 1};
-            app.DirectGrid.ColumnWidth   = {80, 70, 90, 70, 30, 100, 130, '1x'};
+            app.DirectGrid.ColumnWidth   = {80, 70, 90, 70, 30, 90, 120, '1x'};
             app.DirectGrid.RowSpacing    = 4;
-            app.DirectGrid.ColumnSpacing = 8;
+            app.DirectGrid.ColumnSpacing = 2;
             app.DirectGrid.Padding       = [8 6 8 8];
         
             % Row 1 
@@ -1692,9 +1660,11 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             app.CopyLogBtn.BackgroundColor = [0.9 0.95 1];
             app.ClearLogBtn.BackgroundColor = [0.9 0.95 1];
         
-            app.HelpTipLbl = uilabel(app.LoggerGrid,'HorizontalAlignment','left', ...
+            app.HelpTipLbl = uilabel(app.LoggerGrid, ...
+                'HorizontalAlignment','left', ...
+                'WordWrap', 'on', ...
                 'Text', sprintf(['Tips:\n',...
-                '• Auto-load searches the app’s folder BGDataKnown.mat and BGParamKnown.mat. \n You can also load the files manually.\n', ...
+                '• Auto-load searches the app’s folder BGDataKnown.mat and BGParamKnown.mat. You can also load the files manually.\n', ...
                 '• "Compute Relative Error" saves %s and logs minima in the Logger view.\n', ...
                 '• All plots render inside the app.'], app.matFile));
         
@@ -1709,7 +1679,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
         function invalidateResults(app)
             app.hasFreshResults = false;
             if isvalid(app.PlotRelErrBtn),      app.PlotRelErrBtn.Enable = 'off'; end
-            if isvalid(app.WorkersDrop),        app.WorkersDrop.Enable = 'off'; end
             if isvalid(app.RelPlotChoice),      app.RelPlotChoice.Enable = 'off'; end
             if isvalid(app.PsiIDPDrop),         app.PsiIDPDrop.Enable = 'off'; end
             if isvalid(app.ParamPlotDrop),      app.ParamPlotDrop.Enable = 'off'; end
@@ -1751,7 +1720,11 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             % ---------- Relative Errors ----------
             G = app.RelErrGrid;
             if ~isempty(G) && isvalid(G)
-               if compact
+                % Enforce padding before reflow
+                G.Padding       = [8 6 8 8];
+                G.ColumnSpacing = 8;
+                G.RowSpacing    = 6; 
+                if compact
                     G.ColumnWidth = {'fit','1x'};
                     G.RowHeight   = {'fit','fit','fit','fit','fit','fit','fit'};
                     app.setCell(G,'Rel_xiLbl',         1,1);
@@ -1785,6 +1758,10 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             % ---------- IDP ----------
             Gi = app.IDPGrid;
             if ~isempty(Gi) && isvalid(Gi)
+                % Enforce padding before reflow
+                Gi.Padding       = [8 6 8 8];
+                Gi.ColumnSpacing = 2;
+                Gi.RowSpacing    = 4;
                 if compact
                     Gi.ColumnWidth = {'fit','1x'};
                     Gi.RowHeight   = {'fit','fit','fit','fit','fit','fit','fit','fit','fit', spacerPx};
@@ -1819,6 +1796,10 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             % ---------- Direct ----------
             Gd = app.DirectGrid;
             if ~isempty(Gd) && isvalid(Gd)
+                % Enforce padding before reflow
+                Gd.Padding       = [8 6 8 8];
+                Gd.ColumnSpacing = 2;
+                Gd.RowSpacing    = 4;
                 if compact
                     Gd.ColumnWidth = {'fit','1x'};
                     Gd.RowHeight   = {'fit','fit','fit','fit','fit','fit','fit','fit','fit', spacerPx};
@@ -1965,7 +1946,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             ax.XTick = ticks;
             ax.XTickLabel     = lbl;
             ax.XTickLabelMode = 'manual';
-            ax.XTickLabelRotation = 45;     % adjust if your param plots use a different rotation
+            ax.XTickLabelRotation = 45;     
             ax.TickLabelInterpreter = 'none';
             ax.FontSize = 10;
         
@@ -1995,42 +1976,37 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 ax.Title.FontWeight = 'bold';
                 % ax.Title.Interpreter = 'none';
             end
-        
             grid(ax,'on'); box(ax,'off');
         end 
     end
     %% ==== PUBLIC CTOR/DTOR ====
     methods (Access = public)
        function app = SEIRSVBHSimulator
-        % --- destroy any previous instance by tag 
-        oldFigs = findall(0,'Type','figure','Tag','SEIRSVBHSimulatorMain');
-        if ~isempty(oldFigs)
-            try
-                delete(oldFigs);
-            catch
-                % ignore errors if the old figure is already gone
+            % --- destroy any previous instance by tag 
+            oldFigs = findall(0,'Type','figure','Tag','SEIRSVBHSimulatorMain');
+            if ~isempty(oldFigs)
+                try
+                    delete(oldFigs);
+                catch
+                    % ignore errors if the old figure is already gone
+                end
             end
-
-        end
-    
-        % ---  destroy the previously stored app handle (if any)
-        oldApp = getappdata(0,'SEIRSVBHSimulator_Handle');
-        if ~isempty(oldApp) && isvalid(oldApp)
-            try
-                delete(oldApp);
-            catch
-                % ignore errors if the old figure is already gone
+            % ---  destroy the previously stored app handle (if any)
+            oldApp = getappdata(0,'SEIRSVBHSimulator_Handle');
+            if ~isempty(oldApp) && isvalid(oldApp)
+                try
+                    delete(oldApp);
+                catch
+                    % ignore errors if the old figure is already gone
+                end
             end
-
-        end
-    
-        % --- Create this instance
-        createComponents(app);
-        registerApp(app, app.UIFigure);
-        runStartupFcn(app, @app.startupFcn);
-    
-        % --- Remember this instance globally for the next launch
-        setappdata(0,'SEIRSVBHSimulator_Handle',app);
+            % --- Create this instance
+            createComponents(app);
+            registerApp(app, app.UIFigure);
+            runStartupFcn(app, @app.startupFcn);
+        
+            % --- Remember this instance globally for the next launch
+            setappdata(0,'SEIRSVBHSimulator_Handle',app);
        end
        function delete(app)
             % Clear the global handle if it still points to me
@@ -2041,6 +2017,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             if ~isempty(app.UIFigure) && isvalid(app.UIFigure)
                 delete(app.UIFigure);
             end
-        end
+       end
     end
 end
