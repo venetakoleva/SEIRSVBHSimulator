@@ -431,7 +431,13 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
 
         % Relative Error 
         function onComputeRelErr(app, varargin)
-               
+            % Prevent starting another computation if one is already running
+            if app.IsComputing
+                uialert(app.UIFigure, ...
+                    'A relative error computation is already running. Please wait until it completes.', ...
+                    'Computation in Progress');
+                return;
+            end   
             try
                  % Clear the embedded plotting area before starting a new compute
                  if isempty(app.selectedXiStep) || isempty(app.selectedCStep)
@@ -486,14 +492,6 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 %xi and c are selected, so we proceed further
 
                 app.invalidateResults();   % clear freshness for this session
-
-                % Prevent starting another computation if one is already running
-                if app.IsComputing
-                    uialert(app.UIFigure, ...
-                        'A relative error computation is already running. Please wait until it completes.', ...
-                        'Computation in Progress');
-                    return;
-                 end
                 
                 app.IsComputing = true;
 
