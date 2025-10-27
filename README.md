@@ -110,16 +110,25 @@ The interactive app is organized into several functional tabs, each correspondin
 
 ####  **Compute and Plot Relative Errors** tab:
 Users can computes and visualize the **$l_2$** and **$l_\infty$** relative errors between modeled and reported data across the **$(\xi, c)$** parameter space. 
+
+[The "Compute and Plot Relative Errors" Tab](seirsvbh.simulator.assets.relErrTab.png)
+*Figure 1: Relative Erros computation and visualization.*
+
  - **Procedure**
 1. Choose  $\xi$ and $c$ steps. Optionally, adjust the number of workers for parallel processing.
 2. Press "Compute Relative Errros" button.
 3. All results are logged into the **Logger** view.
 4. Choose a plot option adn press "Plot Relative Errors" button.
 
+!
 
 ####  **Solve and Plot Inverse Problem** tab:
 
 Performs parameter estimation by solving the **inverse problem** for the computed **$(\xi, c)$** pair, where the **$l_2$** and **$l_\infty$** relative errors reach their minimum.  
+
+![The "Solve and Plot Inverse Problem" Tab](seirsvbh.simulator.assets.invProblemTab.png)
+*Figure 1: Inverse Problem solution and visualization.*
+
  - **Procedure**
 1. Review the pre-filled, non-editable  **$(\xi, c)$**, computed based on the **$\xi$**, **$c$** steps selected in "Compute and Plot Relative Errors" tab.
 2. Press "Solve Inverse Problem button".  
@@ -132,14 +141,19 @@ Performs parameter estimation by solving the **inverse problem** for the compute
 - **$\tau$** - Mortality rate of infectious people
 5. Choose a plot option and press "Plot Parameter" button.
 
+
 ####  **Solve and Plot Inverse Problem** tab:
 
 Solves the **direct SEIRS-VBH model** forward in time using the parameters obtained from the inverse problem.  
 This enables direct comparison between model outputs (**$A$**, **$V_{\text{total}}$**, **$R_{\text{total}}$**, **$D_{\text{total}}$**, **$H_{\text{total}}$**)  and the reported epidemiological data over the period **08 June 2020 – 12 March 2023**.
 
+![The "Solve and Plot Direct Problem" Tab](seirsvbh.simulator.assets.dirProblemTab.png)
+*Figure 1: Direct Problem solution and visualization.*
+
  - **Procedure**
 1. Review the pre-filled, non-editable  **$(\xi, c)$** $$, computed based on the **$\xi$**, **$c$** steps selected in "Compute and Plot Relative Errors" tab.
 2. Choose a plot option and press "Plot Selected" button.
+
 
 
 ##  Logging
