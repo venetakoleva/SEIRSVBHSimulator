@@ -1158,7 +1158,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                     case {'I, V together (computed only)', 'iv-model'}
                         plot(ax, tModAll, I_mod, 'Color',[0.55 0.37 0.67], 'LineWidth',1.8, 'DisplayName','I (Infectious)');
                         plot(ax, tModAll, V_mod, 'Color',[0    0.39 0   ], 'LineWidth',1.8, 'DisplayName','V (Vaccinated susceptible)');
-                        legend(ax, 'Location','northeast','FontSize',12,'Box','on');
+                        legend(ax, 'Location','northwest','FontSize',12,'Box','on');
                         title(ax, 'Components of computed solution: E, I, V and H', 'FontSize',16, 'Interpreter','tex');
                         ylabel(ax,'Individuals','FontSize',16);
         
@@ -1185,7 +1185,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                             [tCommon, iaRep, iaMod] = intersect(tRepAll, tModAll);
                             if ~isempty(tCommon)
                                 plot(ax, tCommon, RD.A(iaRep), 'k', 'LineWidth',1.8, 'DisplayName','Reported');
-                                plot(ax, tCommon, A_mod(iaMod), 'm', 'LineWidth',1.8, 'DisplayName','Model');
+                                plot(ax, tCommon, A_mod(iaMod), 'm', 'LineWidth',1.8, 'DisplayName','Computed');
                                 legend(ax, 'Location','northeast','FontSize',12,'Box','on');
                                 title(ax, 'Component of computed component: A = E + I + H', 'FontSize',16, 'Interpreter','tex');
                                 ylabel(ax,'Individuals','FontSize',16);
@@ -1199,7 +1199,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                             [tCommon, iaRep, iaMod] = intersect(tRepAll, tModAll);
                             if ~isempty(tCommon)
                                 plot(ax, tCommon, RD.Vtotal(iaRep), 'k', 'LineWidth',1.8, 'DisplayName','Reported');
-                                plot(ax, tCommon, modelVt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Model');
+                                plot(ax, tCommon, modelVt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Computed');
                                 legend(ax, 'Location','northwest','FontSize',12,'Box','on');
                                 title(ax, 'Component of computed solution: V_{total}', 'FontSize',16, 'Interpreter','tex');
                                 ylabel(ax,'Individuals (cumulative)','FontSize',16);
@@ -1213,7 +1213,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                             [tCommon, iaRep, iaMod] = intersect(tRepAll, tModAll);
                             if ~isempty(tCommon)
                                 plot(ax, tCommon, RD.Rtotal(iaRep), 'k', 'LineWidth',1.8, 'DisplayName','Reported');
-                                plot(ax, tCommon, modelRt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Model');
+                                plot(ax, tCommon, modelRt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Computed');
                                 legend(ax, 'Location','northwest','FontSize',12,'Box','on');
                                 title(ax, 'Component of computed solution: R_{total}', 'FontSize',16, 'Interpreter','tex');
                                 ylabel(ax,'Individuals (cumulative)','FontSize',16);
@@ -1227,7 +1227,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                             [tCommon, iaRep, iaMod] = intersect(tRepAll, tModAll);
                             if ~isempty(tCommon)
                                 plot(ax, tCommon, RD.Dtotal(iaRep), 'k', 'LineWidth',1.8, 'DisplayName','Reported');
-                                plot(ax, tCommon, modelDt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Model');
+                                plot(ax, tCommon, modelDt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Computed');
                                 legend(ax, 'Location','northwest','FontSize',12,'Box','on');
                                 title(ax, 'Component of computed solution: D_{total}', 'FontSize',16, 'Interpreter','tex');
                                 ylabel(ax,'Individuals (cumulative)','FontSize',16);
@@ -1241,7 +1241,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                             [tCommon, iaRep, iaMod] = intersect(tRepAll, tModAll);
                             if ~isempty(tCommon)
                                 plot(ax, tCommon, RD.Htotal(iaRep), 'k', 'LineWidth',1.8, 'DisplayName','Reported');
-                                plot(ax, tCommon, modelHt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Model');
+                                plot(ax, tCommon, modelHt(iaMod),   'm', 'LineWidth',1.8, 'DisplayName','Computed');
                                 legend(ax, 'Location','northwest','FontSize',12,'Box','on');
                                 title(ax, 'Component of computed solution: H_{total}', 'FontSize',16, 'Interpreter','tex');
                                 ylabel(ax,'Individuals (cumulative)','FontSize',12);
