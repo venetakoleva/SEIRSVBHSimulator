@@ -242,7 +242,7 @@ See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution n
 
 ## Disclaimer
 
-The materials in this repository are provided “as is”, without warranty of any kind, express or implied.
+The materials contained in or produced by this repository are provided “as is”, without warranty of any kind, express or implied.
 The authors and their institutions are not liable for any damages or losses resulting from the use of this code or data.
 
 ---
