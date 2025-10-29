@@ -22,7 +22,8 @@ This tool reproduces the results from the accompanying article and allows users 
 As detailed in the accompanying article: 
 - Compute and plot the **$l_2$** and **$l_\infty$** relative errors;
 - Solve the **Inverse Problem** and **Direct Problem**;
-- Plot the estimated parameters and compare model simulations with reported data.
+- Plot the estimated parameters and compare model simulations with reported data;
+- Supports parallelized computation using MATLAB's Parallel Computing Toolbox for efficient concurrent simulations.
 
 
 ## Components
