@@ -1,0 +1,50 @@
+                Creative Commons Attribution 4.0 International (CC BY 4.0)
+                ==========================================================
+
+                Copyright (c) [2025] [Veneta Koleva, Tsvetan Hristov]
+
+This dataset, figures, and all other non-code materials contained in or produced by this repository are 
+licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+You are free to:
+
+• **Share** - copy and redistribute the material in any medium or format
+• **Adapt** - remix, transform, and build upon the material for any purpose, even commercially.
+
+Under the following terms:
+
+• **Attribution** - You must give appropriate credit, provide a link to the license,
+and indicate if changes were made. You may do so in any reasonable manner,
+but not in any way that suggests the licensor endorses you or your use.
+
+• **No additional restrictions** - You may not apply legal terms or technological measures
+that legally restrict others from doing anything the license permits.
+
+Full license text:
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+Summary page:
+https://creativecommons.org/licenses/by/4.0/
+
+Recommended attribution format:
+"[Dataset or Figure name]" by [Veneta Koleva, Tsvetan Hristov] is licensed under CC BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
+If you use this dataset or figures in a publication, please cite:
+[“Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data” - (TODO add link)]
+
+-------------------------------------------------------------------
+DISCLAIMER
+-------------------------------------------------------------------
+This material is provided "as is", without warranty of any kind,
+express or implied, including but not limited to the warranties of
+merchantability, fitness for a particular purpose, and non-infringement.
+The author(s) or institution shall not be liable for any claim, damages,
+or other liability arising from the use of these materials.
+
+-------------------------------------------------------------------
+NOTE
+-------------------------------------------------------------------
+This license applies only to non-code materials such as datasets (.mat files),
+figures, and visualizations contained in or produced by this repository.
+All source code in this repository is licensed separately under the
+Apache License, Version 2.0 (see LICENSES/LICENSE-CODE.txt).
