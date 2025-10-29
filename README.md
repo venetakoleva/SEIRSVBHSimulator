@@ -2,8 +2,15 @@
 
 ## :books: **This repository accompanies the following article:**  
 
-**“Inverse Problem for an Extended Time-Dependent SEIRS Model:
-Validation with COVID-19 Real-World Data”** - ([link](https://TODO.com/article))  
+Margenov, S,; Popivanov N.; Hristov, T.; Koleva, V., Inverse Problem for an Extended Time-Dependent SEIRS Model:
+Validation with COVID-19 Real-World Data, *Journal Issue TODO*, 2025.[link](https://TODO.com/article)
+
+
+![License: Apache 2.0](https://img.shields.io/badge/Code_License-Apache_2.0-blue.svg)
+![Data License: CC BY 4.0](https://img.shields.io/badge/Data_License-CC_BY_4.0-lightgrey.svg)
+![Paper DOI](https://img.shields.io/badge/Paper_DOI-10.xxxxTODO%2Fjournal--doi-blue.svg)
+![Repo DOI](https://img.shields.io/badge/Repository_DOI-10.xxxxTODO%2Fzenodo--doi-green.svg)
+
 
 ## Overview
 
@@ -202,9 +209,14 @@ To solve the direct problem and visualize the results, follow this
 
 ##  Citation
 
-If you use this software, please cite:
+If you use this software, please cite both the associated paper and the repository:
 
-> Koleva, Veneta, Hristov, Tsvetan (2025). *SEIRSVBH Simulator*. DOI: 10.5281/zenodo.xxxxx  <!-- TODO: replace with real DOI -->
+Margenov, S,; Popivanov N.; Hristov, T.; Koleva, V., Inverse Problem for an Extended Time-Dependent SEIRS Model:
+Validation with COVID-19 Real-World Data, *Journal Issue TODO*, 2025.[link](https://TODO.com/article)
+
+To cite the repository directly:
+
+SEIRSVBH Simulator, GitHub repository (2025). DOI: 10.5281/zenodo.xxxxx  <!-- TODO: replace with real DOI -->
 
 ```bibtex
 @software{KolevaHristov2025SEIRSVBH,
@@ -220,8 +232,18 @@ If you use this software, please cite:
 
 ## License
 
-Code is released under the **Apache License 2.0**.  
+This repository contains both source code and research materials.
+Different licenses apply to different components:
+- Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0**.  
+- Data and Visualizations (in /+data, /+assets, or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**
 See [`LICENSE`](./LICENSE) and attribution notices in [`NOTICE`](./NOTICE).
+
+---
+
+## Disclaimer
+
+The materials in this repository are provided “as is”, without warranty of any kind, express or implied.
+The authors and their institutions are not liable for any damages or losses resulting from the use of this code or data.
 
 ---
 
