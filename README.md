@@ -234,9 +234,9 @@ SEIRSVBH Simulator, GitHub repository (2025). DOI: 10.5281/zenodo.xxxxx  <!-- TO
 
 This repository contains both source code and research materials.
 Different licenses apply to different components:
-- Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0**.  
+- Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0** See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Code)  
 - Data and Visualizations (in /+data, /+assets, or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**
-See [`LICENSE`](./LICENSE) and attribution notices in [`NOTICE`](./NOTICE).
+See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
 
 ---
 
