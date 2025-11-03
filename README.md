@@ -83,7 +83,7 @@ The data files contain officially reported COVID-19 data for Bulgaria over the t
 
 | File | Required variables |
 |------|--------------------|
-| **BGDataKnownFinal.mat** | `A, H, Rtotal, Vtotal, Dtotal, Htotal, I1, N1, R1` |
+| **BGDataKnownFinal.mat** | `A, H, Rtotal, Vtotal, Dtotal, Htotal, I1, N1, R1, V1, B1` |
 | **BGParamKnown.mat** | `Lambda, theta, omega, lambda, nu, mu, phi` |
 
 
@@ -237,6 +237,7 @@ This repository contains both source code and research materials.
 Different licenses apply to different components:
 - Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0** See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Code)  
 - Data and Visualizations (in /+data, /+assets, or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**
+
 See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
 
 ---
