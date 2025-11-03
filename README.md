@@ -22,7 +22,8 @@ This tool reproduces the results from the accompanying article and allows users 
 As detailed in the accompanying article: 
 - Compute and plot the **$l_2$** and **$l_\infty$** relative errors;
 - Solve the **Inverse Problem** and **Direct Problem**;
-- Plot the estimated parameters and compare model simulations with reported data.
+- Plot the estimated parameters and compare model simulations with reported data;
+- Supports parallelized computation using MATLAB's Parallel Computing Toolbox for efficient concurrent simulations.
 
 
 ## Components
@@ -234,15 +235,15 @@ SEIRSVBH Simulator, GitHub repository (2025). DOI: 10.5281/zenodo.xxxxx  <!-- TO
 
 This repository contains both source code and research materials.
 Different licenses apply to different components:
-- Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0**.  
+- Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0** See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Code)  
 - Data and Visualizations (in /+data, /+assets, or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**
-See [`LICENSE`](./LICENSE) and attribution notices in [`NOTICE`](./NOTICE).
+See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
 
 ---
 
 ## Disclaimer
 
-The materials in this repository are provided “as is”, without warranty of any kind, express or implied.
+The materials contained in or produced by this repository are provided “as is”, without warranty of any kind, express or implied.
 The authors and their institutions are not liable for any damages or losses resulting from the use of this code or data.
 
 ---
