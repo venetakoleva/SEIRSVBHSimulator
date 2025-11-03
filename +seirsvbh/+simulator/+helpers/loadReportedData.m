@@ -32,5 +32,5 @@ function reportedData = loadReportedData()
     P = load(fullfile('+seirsvbh/simulator/data', 'BGParamKnown.mat'), 'Lambda','theta','omega','lambda','nu','mu','phi');
 
     % Combine into a single structure
-    reportedData = struct( 'Lambda', P.Lambda, 'theta', P.theta, 'omega', P.omega, 'lambda', P.lambda, 'nu', P.nu, 'mu', P.mu, 'phi', P.phi, 'A', S.A, 'H', S.H, 'Vtotal', S.Vtotal, 'Rtotal', S.Rtotal, 'Dtotal', S.Dtotal, 'Htotal', S.Htotal, 'I1', S.I1, 'N1', S.N1, 'R1', S.R1);
+    reportedData = struct( 'Lambda', P.Lambda, 'theta', P.theta, 'omega', P.omega, 'lambda', P.lambda, 'nu', P.nu, 'mu', P.mu, 'phi', P.phi, 'A', S.A, 'H', S.H, 'Vtotal', S.Vtotal, 'Rtotal', S.Rtotal, 'Dtotal', S.Dtotal, 'Htotal', S.Htotal, 'I1', S.I1, 'N1', S.N1, 'R1', S.R1, 'V1', S.V1, 'B1', S.B1);
 end
