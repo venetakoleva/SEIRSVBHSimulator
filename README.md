@@ -78,7 +78,7 @@ SEIRSVBH_Simulator/
 
 ```
 ##  Data files
-The data files contain officially reported COVID-19 data for Bulgaria over the time period **08 June 2020 – 12 March 2023**. 
+The data files contain officially reported COVID-19 data for Bulgaria over the time period **07 June 2020 – 12 March 2023**. 
 
 | File | Required variables |
 |------|--------------------|
@@ -184,7 +184,7 @@ To solve the inverse problem and visualize the results, follow this
 ####  **Solve and Plot Inverse Problem** tab:
 
 Solves the **direct SEIRS-VBH model** forward in time using the parameters obtained from the inverse problem.  
-This enables direct comparison between model outputs (**$A$**, **$V_{\text{total}}$**, **$R_{\text{total}}$**, **$D_{\text{total}}$**, **$H_{\text{total}}$**)  and the reported epidemiological data over the period **08 June 2020 – 12 March 2023**.
+This enables direct comparison between model outputs (**$A$**, **$V_{\text{total}}$**, **$R_{\text{total}}$**, **$D_{\text{total}}$**, **$H_{\text{total}}$**)  and the reported epidemiological data over the period **07 June 2020 – 12 March 2023**.
 
 <p align = "center">
   <img src="./+seirsvbh/+simulator/+assets/dirProblemTab.png" alt='Solve and Plot Direct Problem Tab' width="800">

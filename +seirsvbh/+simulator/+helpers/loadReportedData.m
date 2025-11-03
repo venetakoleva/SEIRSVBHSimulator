@@ -28,7 +28,7 @@ function reportedData = loadReportedData()
 %   reportedData = loadReportedData();
 
     % Load the two MAT files
-    S = load(fullfile('+seirsvbh/simulator/data', 'BGDataKnown.mat'),  'A','H','Rtotal','Vtotal','Dtotal','Htotal','I1','N1','R1');
+    S = load(fullfile('+seirsvbh/simulator/data', 'BGDataKnown.mat'),  'A','H','Rtotal','Vtotal','Dtotal','Htotal','I1','N1','R1', 'V1', 'B1');
     P = load(fullfile('+seirsvbh/simulator/data', 'BGParamKnown.mat'), 'Lambda','theta','omega','lambda','nu','mu','phi');
 
     % Combine into a single structure

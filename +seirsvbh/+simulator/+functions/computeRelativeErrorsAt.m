@@ -35,16 +35,16 @@ function [relErrl2, relErrInf] = computeRelativeErrorsAt(xi, c, h, psiFunc, repo
     % 3) Initial conditions
     N1 = reportedData.N1; I1 = reportedData.I1;
     R1 = reportedData.R1;
-    H1  = reportedData.H(1);
-    E1  = reportedData.A(1) - I1 - H1;
-    V1  = 0; 
-    B1 = 0; 
+    H1 = reportedData.H(1);
+    E1 = reportedData.A(1) - I1 - H1;
+    V1 = reportedData.V1; 
+    B1 = reportedData.B1; 
     S1 = N1 - (E1 + I1 + R1 + V1 + B1 + H1);
 
     Rt1 = reportedData.Rtotal(1);
-    Ht1     = reportedData.Htotal(1);
-    Vt1     = reportedData.Vtotal(1);
-    Dt1     = reportedData.Dtotal(1);
+    Ht1 = reportedData.Htotal(1);
+    Vt1 = reportedData.Vtotal(1);
+    Dt1 = reportedData.Dtotal(1);
 
     y0 = [S1; E1; I1; R1; V1; B1; H1; Rt1; Ht1; Vt1; Dt1];
 
@@ -65,7 +65,7 @@ function [relErrl2, relErrInf] = computeRelativeErrorsAt(xi, c, h, psiFunc, repo
 
     % 6) Reported series
     A_rep  = reportedData.A(:);
-    H_rep = reportedData.H(:);
+    H_rep  = reportedData.H(:);
     Rt_rep = reportedData.Rtotal(:);
     Vt_rep = reportedData.Vtotal(:);
     Ht_rep = reportedData.Htotal(:);

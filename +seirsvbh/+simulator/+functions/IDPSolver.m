@@ -41,8 +41,8 @@ Ibeta  = zeros(1,L-1);
 % initial conditions 
 N(1) = reportedData.N1;
 I(1) = reportedData.I1;
-V(1) = 0; 
-B(1) = 0;
+V(1) = reportedData.V1; 
+B(1) = reportedData.B1;
 R(1) = reportedData.R1;
 H(1) = reportedData.H(1);
 E(1) = reportedData.A(1) - I(1) - reportedData.H(1);

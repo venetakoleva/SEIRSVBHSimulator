@@ -44,8 +44,8 @@ function ODESol = directProblemSolver(yModel, reportedData, h)
 
     H1  = reportedData.H(1);
     E1  = reportedData.A(1) - I1 - H1;
-    V1  = 0;
-    B1  = 0;
+    V1  = reportedData.V1;
+    B1  = reportedData.B1;
     S1  = N1 - (E1 + I1 + R1 + V1 + B1 + H1);
 
     RtTot1 = reportedData.Rtotal(1);
