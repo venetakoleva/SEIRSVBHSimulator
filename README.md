@@ -9,7 +9,7 @@ Validation with COVID-19 Real-World Data, 2025 - Submitted in MDPI, Mathematics.
 ![License: Apache 2.0](https://img.shields.io/badge/Code_License-Apache_2.0-blue.svg)
 ![Data License: CC BY 4.0](https://img.shields.io/badge/Data_License-CC_BY_4.0-lightgrey.svg)
 ![Paper DOI](https://img.shields.io/badge/Paper_DOI-10.xxxxTODO%2Fjournal--doi-blue.svg)
-![Repo DOI](https://img.shields.io/badge/Repository_DOI-10.xxxxTODO%2Fzenodo--doi-green.svg)
+![Repo DOI](https://img.shields.io/badge/Repository_DOI-10.5281%2Fzenodo.17715035-green.svg)
 
 
 ## Overview
