@@ -10,7 +10,7 @@ authors:
   - family-names: Hristov
     given-names: Tsvetan
     affiliation: "Sofia University 'St. Kliment Ohridski'"
-doi: 10.5281/zenodo.xxxxx   #[repository DOI TODO]
+doi: 10.5281/zenodo.17715035
 preferred-citation: 
     type: article
     title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data"
