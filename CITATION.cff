@@ -1,33 +1,18 @@
 ### `CITATION.cff`
-```yaml
 cff-version: 1.2.0
 message: "If you use this software, please cite both this repository and the related paper."
-title: "SEIRSVBHSimulator: Code and Data for 'Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data'"
-version: 1.0.0
+title: "SEIRSVBHSimulator"
 date-released: 2025-10-11
 authors:
   - family-names: Koleva
     given-names: Veneta
-    orcid: "0000-0001-6019-7106"
+    affiliation: "Sofia University 'St. Kliment Ohridski'"
   - family-names: Hristov
     given-names: Tsvetan
-    orcid: "0000-0002-6417-1816"
+    affiliation: "Sofia University 'St. Kliment Ohridski'"
 doi: 10.5281/zenodo.xxxxx   #[repository DOI TODO]
-date-released: [TODO]
-repository-code: "https://github.com/venetakoleva/SEIRSVBHSimulator"
-license: Apache-2.0 and CC-BY-4.0
-preferred-citation:
-  type: article
-  title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data"
-  authors:
-    - family-names: Koleva
-      given-names: Veneta
-    - family-names: Hristov
-      given-names: Tsvetan
-    - family-names: TODO
-      given-names: TODO
-    - family-names: TODO
-      given-names: TODO
-  journal: "[TODO]"
-  year: 2025
-  doi: 10.5281/zenodo.xxxxx #[paper DOI TODO]
+preferred-citation: 
+    type: article
+    title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data"
+    authors: [TODO]
+    doi: [Submitted in MDPI, Mathematics. TODO]

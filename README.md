@@ -3,7 +3,7 @@
 ## :books: **This repository accompanies the following article:**  
 
 Margenov, S,; Popivanov N.; Hristov, T.; Koleva, V., Inverse Problem for an Extended Time-Dependent SEIRS Model:
-Validation with COVID-19 Real-World Data, *Journal Issue TODO*, 2025.[link](https://TODO.com/article)
+Validation with COVID-19 Real-World Data, 2025 - Submitted in MDPI, Mathematics.
 
 
 ![License: Apache 2.0](https://img.shields.io/badge/Code_License-Apache_2.0-blue.svg)
@@ -227,20 +227,10 @@ To solve the direct problem and visualize the results, follow this
 If you use this software, please cite both the associated paper and the repository:
 
 Margenov, S,; Popivanov N.; Hristov, T.; Koleva, V., Inverse Problem for an Extended Time-Dependent SEIRS Model:
-Validation with COVID-19 Real-World Data, *Journal Issue TODO*, 2025.[link](https://TODO.com/article)
+Validation with COVID-19 Real-World Data, 2025 - Submitted in MDPI, Mathematics.
 
-To cite the repository directly:
+For details, see  [`CITATION.cff`](./CITATION.cff).
 
-SEIRSVBH Simulator, GitHub repository (2025). DOI: 10.5281/zenodo.xxxxx  <!-- TODO: replace with real DOI -->
-
-```bibtex
-@software{KolevaHristov2025SEIRSVBH,
-  title        = {SEIRSVBH Simulator},
-  author       = {Koleva, Veneta and Hristov, Tsvetan},
-  year         = {2025},
-  doi          = {10.5281/zenodo.xxxxx},  % TODO: update DOI
-  url          = {https://github.com/venetakoleva/SEIRSVBHSimulator}
-}
 ```
 
 ---
@@ -250,9 +240,7 @@ SEIRSVBH Simulator, GitHub repository (2025). DOI: 10.5281/zenodo.xxxxx  <!-- TO
 This repository contains both source code and research materials.
 Different licenses apply to different components:
 - Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0** See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Code)  
-- Data and Visualizations (in /+data, /+assets, or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**
-
-See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
+- Data and Visualizations (in /+data, /+assets, /+results or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**. See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
 
 ---
 
@@ -263,13 +251,10 @@ The authors and their institutions are not liable for any damages or losses resu
 
 ---
 
-## Authors & Contact
+## Authors
 
 **Veneta Koleva**  
 **Tsvetan Hristov**
-
-For questions or contributions, please open an [issue](https://github.com/venetakoleva/SEIRSVBHSimulator/issues).
-
 ---
 
-*Last updated - October 2025.*
+*Last updated - November 2025.*
