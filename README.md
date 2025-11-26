@@ -220,7 +220,7 @@ To solve the direct problem and visualize the results, follow this
 
 - All actions, summary of relative errors timestamped in the **Logger** panel  
 - `Copy` / `Clear` buttons manage log contents  
----
+
 
 ##  Citation
 
@@ -231,9 +231,7 @@ Validation with COVID-19 Real-World Data, 2025 - Submitted in MDPI, Mathematics.
 
 For details, see  [`CITATION.cff`](./CITATION.cff).
 
-```
 
----
 
 ## License
 
@@ -242,19 +240,25 @@ Different licenses apply to different components:
 - Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0** See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Code)  
 - Data and Visualizations (in /+data, /+assets, /+results or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**. See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
 
----
 
 ## Disclaimer
 
 The materials contained in or produced by this repository are provided “as is”, without warranty of any kind, express or implied.
 The authors and their institutions are not liable for any damages or losses resulting from the use of this code or data.
 
----
+
 
 ## Authors
 
 **Veneta Koleva**  
-**Tsvetan Hristov**
----
+Affiliation: Sofia University 'St. Kliment Ohridski'  
+Email: v.koleva@fmi.uni-sofia.bg  
+ORCID: https://orcid.org/0000-0001-6019-7106 
+
+**Tsvetan Hristov**  
+Affiliation: Sofia University 'St. Kliment Ohridski'  
+Email: tsvetan@fmi.uni-sofia.bg  
+ORCID: https://orcid.org/0000-0002-6417-1816  
+
 
 *Last updated - November 2025.*
