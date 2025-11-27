@@ -1,5 +1,6 @@
 +seirsvbh/+simulator/+ui/SEIRSVBHSimulator.asv
 results.mat
 nWorkersUsed.m
-+results/
++seirsvbh/+simulator/+results/
+CITATION.asv
 
