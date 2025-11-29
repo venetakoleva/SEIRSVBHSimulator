@@ -9,7 +9,8 @@ Validation with COVID-19 Real-World Data, 2025 - Submitted in MDPI, Mathematics.
 ![License: Apache 2.0](https://img.shields.io/badge/Code_License-Apache_2.0-blue.svg)
 ![Data License: CC BY 4.0](https://img.shields.io/badge/Data_License-CC_BY_4.0-lightgrey.svg)
 ![Paper DOI](https://img.shields.io/badge/Paper_DOI-10.xxxxTODO%2Fjournal--doi-blue.svg)
-![Repo DOI](https://img.shields.io/badge/Repository_DOI-10.5281%2Fzenodo.17715035-green.svg)
+[![Repo DOI](https://img.shields.io/badge/Repository_DOI-10.5281%2Fzenodo.17715035-green.svg)](https://doi.org/10.5281/zenodo.17715035)
+
 
 
 ## Overview
@@ -236,7 +237,7 @@ For details, see  [`CITATION.cff`](./CITATION.cff).
 This repository contains both source code and research materials.
 Different licenses apply to different components:
 - Code in +seirsvbh/+simulator (in /+ui, /+main, /+helpers, /+functions ) licensed under the **Apache License 2.0** See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Code)  
-- Data and Visualizations (in /+data, /+assets, /+results or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**. See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
+- Data and Visualizations (in /+data, /+assets or produced by this software) is licensed under the **Creative Commons Attribution 4.0 International License (CC-BY 4.0)**. See [`LICENSE`](./+seirsvbh/+simulator/+licenses/LICENSE-Data) and attribution notices in [`NOTICE`](./NOTICE.md).
 
 
 ## Disclaimer
