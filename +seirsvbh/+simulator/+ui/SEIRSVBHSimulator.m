@@ -416,9 +416,15 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
             if isempty(event.Value), return; end
             app.selectedCStep = event.Value;
         end
-        function onRelPlotChoiceChanged(app, event)
-            if isempty(event.Value), return; end         
-            app.selectedRelPlot = event.Value;          
+        function onRelPlotChoiceChanged(app, src, event)
+            if nargin > 2 && isprop(event, 'Value') && ~isempty(event.Value)
+                val = event.Value;
+            else
+                val = src.Value;     % Works on R2020b
+            end
+
+            if isempty(val), return; end
+            app.selectedRelPlot = val;
         end
         function onParamPlotChoiceChanged(app, event)
             if isempty(event.Value), return; end         
@@ -1412,7 +1418,7 @@ classdef SEIRSVBHSimulator < matlab.apps.AppBase
                 'ItemsData', {"", ...
                               "l2-contour","l2-surface","linf-contour","linf-surface"}, ...
                 'Value', "", ...
-                'ValueChangedFcn', @(dd,ev) app.onRelPlotChoiceChanged(ev), ...
+                'ValueChangedFcn', @(dd,ev) app.onRelPlotChoiceChanged(dd, ev), ...
                 'Tag','Rel_RelPlotChoice');
             app.RelPlotChoice.Layout.Row = 2; 
             app.RelPlotChoice.Layout.Column = [2 3];
