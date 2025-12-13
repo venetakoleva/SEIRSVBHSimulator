@@ -148,11 +148,11 @@ Run it in the MATLAB **Command Window** as:
 seirsvbh.simulator.main.runIDPandDirectDriver
 ```
 
-**2. runSeirReferencetDriver**
+**3. runSeirReferencetDriver**
 This script performs the following steps:
 - Loads reported data BGDataKnownFinal.mat and BGParamKnown.mat;
 - Solves the inverse problem for a standard SEIR model (`IDPSolverSeir`);
-- Computes and prints the relative errors (`computeRelativeErrorsAt`) for the SEIR model; 
+- Computes and prints the relative errors (`computeRelativeErrorsAt`) for the reference SEIR model; 
 
 Run it in the MATLAB **Command Window** as:
 
