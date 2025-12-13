@@ -15,14 +15,14 @@
 
 function [relErrL2, relErrInf] = computeRelativeErrorsAtSeir(ySeir, h, reportedData)
 %COMPUTERELATIVEERRORSATSEIR
-%   Compute relative L2 and Linf errors for SEIR model
+%   Compute relative l2 and linf errors for the SEIR model
 %   The reported series are:
 %       A_rep = reportedData.A
 %       R_rep = reportedData.Rtotal + reportedData.Dtotal
 %
 %   Outputs:
-%       relErrL2  : sum of relative L2 errors over A, R
-%       relErrInf : sum of relative Linf errors over A, R
+%       relErrL2  : sum of relative l2 errors over A, R
+%       relErrInf : sum of relative linf errors over A, R
 %
 % This code references https://doi.org/10.1063/5.0041868 
 %

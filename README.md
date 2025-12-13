@@ -24,6 +24,7 @@ As detailed in the accompanying article:
 - Compute and plot the **$l_2$** and **$l_\infty$** relative errors;
 - Solve the **Inverse Problem** and **Direct Problem**;
 - Plot the estimated parameters and compare model simulations with reported data;
+- Computes the **$l_2$** and **$l_\infty$** relative errors for a reference standard SEIR model;
 - Supports parallelized computation using MATLAB's Parallel Computing Toolbox for efficient concurrent simulations.
 
 
@@ -46,7 +47,8 @@ SEIRSVBH_Simulator/
         │
         ├── +main/                 → Driver scripts
         │   ├── runRelativeErrorsDriver.m
-        │   └── runIDPandDirectDriver.m
+        │   ├── runIDPandDirectDriver.m
+        │   └── runSeirRefenceDriver.m
         │
         ├── +helpers/              → Utility helper functions
         │   ├── loadReportedData.m
@@ -65,7 +67,10 @@ SEIRSVBH_Simulator/
         │   ├── directProblemSolver.m
         │   ├── computeRelativeErrorsParallel.m
         │   ├── computeRelativeErrorsAt.m
-        │   └── cauchyProblemSolver.mat
+        │   ├── cauchyProblemSolver.m
+        │   ├── IDPSolverSeir.m
+        │   ├── cauchyProblemSolverSeir.m
+        │   └── computeRelativeErrorsAtSeir.m
         │
         ├── +data/                 → Model input and parameter files
         │   ├── BGDataKnownFinal.mat
@@ -143,6 +148,17 @@ Run it in the MATLAB **Command Window** as:
 seirsvbh.simulator.main.runIDPandDirectDriver
 ```
 
+**2. runSeirReferencetDriver**
+This script performs the following steps:
+- Loads reported data BGDataKnownFinal.mat and BGParamKnown.mat;
+- Solves the inverse problem for a standard SEIR model (`IDPSolverSeir`);
+- Computes and prints the relative errors (`computeRelativeErrorsAt`) for the SEIR model; 
+
+Run it in the MATLAB **Command Window** as:
+
+```matlab
+seirsvbh.simulator.main.runSeirReferenceDriver
+```
 
 ###  Using the GUI (For interactive explorations):
 

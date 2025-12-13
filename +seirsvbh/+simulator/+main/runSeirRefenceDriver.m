@@ -16,12 +16,11 @@
 function runSeirRefenceDriver()
 %RUNSEIRREFERENCEDRIVER
 % Driver script to:
-%   - solve the TD–SEIR inverse data problem (IDPSolver_SEIR) on the
+%   - solve the SEIR inverse data problem (IDPSolverSeir) on the
 %     reported COVID-19 data,
 %   - compute relative L2 and Linf errors for the SEIR model
-%     (computeRelativeErrorsAt_SEIR),
-%   - save SEIR reference results in resultsSEIR.mat for later comparison,
-%
+%     (computeRelativeErrorsAtSeir)
+%   
 % This code references https://doi.org/10.1063/5.0041868 
 %
 

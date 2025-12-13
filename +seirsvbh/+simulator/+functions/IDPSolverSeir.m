@@ -14,9 +14,9 @@
 % See NOTICE and CITATION.cff for attribution & citation details.
 
 function y = IDPSolverSeir(reportedData)
-%IDPSOLVER_SEIR  Inverse data problem for a time–dependent SEIR model.
+%IDPSOLVERSEIR  Inverse data problem for a time–dependent SEIR model.
 %
-%   y = IDPSolver_SEIR(reportedData) reconstructs the SEIR parameters beta_k and gamma_k (k = 1..L-1)
+%   y = IDPSolverSeir(reportedData) reconstructs the SEIR parameters beta_k and gamma_k (k = 1..L-1)
 %
 %    SEIR model:
 %       dS/dt = - beta(t) * S(t) * I(t) / N
