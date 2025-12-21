@@ -2,13 +2,12 @@
 
 ## :books: **This repository accompanies the following article:**  
 
-Margenov, S,; Popivanov N.; Hristov, T.; Koleva, V., Inverse Problem for an Extended Time-Dependent SEIRS Model:
-Validation with COVID-19 Real-World Data, 2025 - Submitted in MDPI, Mathematics.
+Margenov, S.; Popivanov, N.; Hristov, T.; Koleva, V. Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with Real-World COVID-19 Data. Mathematics 2026, 14, 13. https://doi.org/10.3390/math14010013
 
 
 ![License: Apache 2.0](https://img.shields.io/badge/Code_License-Apache_2.0-blue.svg)
 ![Data License: CC BY 4.0](https://img.shields.io/badge/Data_License-CC_BY_4.0-lightgrey.svg)
-![Paper DOI](https://img.shields.io/badge/Paper_DOI-10.xxxxTODO%2Fjournal--doi-blue.svg)
+[![Paper DOI](https://img.shields.io/badge/Paper_DOI-10.3390%2Fmath14010013-blue.svg)](https://doi.org/10.3390/math14010013)
 [![Repo DOI](https://img.shields.io/badge/Repository_DOI-10.5281%2Fzenodo.17715034-green.svg)](https://doi.org/10.5281/zenodo.17715034)
 
 
@@ -21,9 +20,9 @@ This tool reproduces the results from the accompanying article and allows users 
 
 ## Key Features
 As detailed in the accompanying article: 
-- Compute and plot the **$l_2$** and **$l_\infty$** relative errors;
-- Solve the **Inverse Problem** and **Direct Problem**;
-- Plot the estimated parameters and compare model simulations with reported data;
+- Computes and plot the **$l_2$** and **$l_\infty$** relative errors;
+- Solves the **Inverse Problem** and **Direct Problem**;
+- Plots the estimated parameters and compare model simulations with reported data;
 - Computes the **$l_2$** and **$l_\infty$** relative errors for a reference standard SEIR model;
 - Supports parallelized computation using MATLAB's Parallel Computing Toolbox for efficient concurrent simulations.
 
@@ -32,7 +31,7 @@ As detailed in the accompanying article:
 - **Scripts:** `+seirsvbh/+simulator/+main/`  
 - **GUI:** `+seirsvbh/+simulator/+ui/SEIRSVBHSimulator`  
   
-  > **Note:** All experiments, figures, and tables in the accompanying article were produced with the MATLAB scripts in  +seirsvbh/+simulator/+main/`. The GUI provides the same computations for interactive exploration, but was not used to generate the paper’s results.
+  > **Note:** All experiments, figures, and tables in the accompanying article were produced with the MATLAB scripts in  +seirsvbh/+simulator/+main/. The GUI provides the same computations for interactive exploration, but was not used to generate the paper’s results.
 ---
 
 ## Repository structure
@@ -276,4 +275,4 @@ Email: tsvetan@fmi.uni-sofia.bg
 ORCID: https://orcid.org/0000-0002-6417-1816  
 
 
-*Last updated - November 2025.*
+*Last updated - December 2025.*

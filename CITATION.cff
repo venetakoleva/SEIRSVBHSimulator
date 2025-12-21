@@ -30,4 +30,10 @@ preferred-citation:
       - family-names: Koleva
         given-names: Veneta
         affiliation: "Sofia University 'St. Kliment Ohridski'"
-    doi: [Submitted in MDPI, Mathematics.]
+     container-title: "Mathematics"
+     publisher: "MDPI"
+     volume: "14"
+     issued: 2026
+     page: "13"
+     doi: "10.3390/math14010013"
+     url: "https://doi.org/10.3390/math14010013"
