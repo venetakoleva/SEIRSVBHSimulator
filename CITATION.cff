@@ -13,7 +13,6 @@ authors:
     given-names: Tsvetan
     affiliation: "Faculty of Mathematics and Informatics, Sofia University 'St. Kliment Ohridski'"
     orcid: "https://orcid.org/0000-0002-6417-1816"
-
 preferred-citation: 
     type: article
     title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data"
