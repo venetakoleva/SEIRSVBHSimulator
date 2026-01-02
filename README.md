@@ -240,8 +240,7 @@ To solve the direct problem and visualize the results, follow this
 
 If you use this software, please cite both the associated paper and the repository:
 
-Margenov, S,; Popivanov N.; Hristov, T.; Koleva, V., Inverse Problem for an Extended Time-Dependent SEIRS Model:
-Validation with COVID-19 Real-World Data, 2025 - Submitted in MDPI, Mathematics.
+Margenov, S.; Popivanov, N.; Hristov, T.; Koleva, V. Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with Real-World COVID-19 Data. Mathematics 2026, 14, 13. https://doi.org/10.3390/math14010013
 
 For details, see  [`CITATION.cff`](./CITATION.cff).
 
