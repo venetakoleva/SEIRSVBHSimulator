@@ -1,40 +1,40 @@
-### `CITATION.cff`
 cff-version: 1.2.0
 message: "If you use this software, please cite both this repository and the related paper."
 title: "SEIRSVBHSimulator"
-doi: 10.5281/zenodo.17715034
-date-released: 2025-10-11
+doi: "10.5281/zenodo.17715034"
+date-released: "2025-10-11"
 authors:
-  - family-names: Koleva
-    given-names: Veneta
+  - family-names: "Koleva"
+    given-names: "Veneta"
     affiliation: "Faculty of Mathematics and Informatics, Sofia University 'St. Kliment Ohridski'"
     orcid: "https://orcid.org/0000-0001-6019-7106"
     email: "v.koleva@fmi.uni-sofia.bg"
-  - family-names: Hristov
-    given-names: Tsvetan
+  - family-names: "Hristov"
+    given-names: "Tsvetan"
     affiliation: "Faculty of Mathematics and Informatics, Sofia University 'St. Kliment Ohridski'"
     orcid: "https://orcid.org/0000-0002-6417-1816"
     email: "tsvetan@fmi.uni-sofia.bg"
-preferred-citation: 
-    type: article
-    title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data"
-    authors:
-      - family-names: Margenov
-        given-names: Svetozar
-        affiliation: "Bulgarian Academy of Sciences"
-      - family-names: Popivanov
-        given-names: Nedyu
-        affiliation: "Sofia University 'St. Kliment Ohridski'; Bulgarian Academy of Sciences"
-      - family-names: Hristov
-        given-names: Tsvetan
-        affiliation: "Sofia University 'St. Kliment Ohridski'"
-      - family-names: Koleva
-        given-names: Veneta
-        affiliation: "Sofia University 'St. Kliment Ohridski'"
-     container-title: "Mathematics"
-     publisher: "MDPI"
-     volume: "14"
-     issued: 2026
-     page: "13"
-     doi: "10.3390/math14010013"
-     url: "https://doi.org/10.3390/math14010013"
+
+preferred-citation:
+  type: article
+  title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with Real-World COVID-19 Data"
+  authors:
+    - family-names: "Margenov"
+      given-names: "Svetozar"
+      affiliation: "Bulgarian Academy of Sciences"
+    - family-names: "Popivanov"
+      given-names: "Nedyu"
+      affiliation: "Sofia University 'St. Kliment Ohridski'; Bulgarian Academy of Sciences"
+    - family-names: "Hristov"
+      given-names: "Tsvetan"
+      affiliation: "Sofia University 'St. Kliment Ohridski'"
+    - family-names: "Koleva"
+      given-names: "Veneta"
+      affiliation: "Sofia University 'St. Kliment Ohridski'"
+  journal: "Mathematics"
+  publisher: "MDPI"
+  volume: "14"
+  year: 2026
+  pages: "13"
+  doi: "10.3390/math14010013"
+  url: "https://doi.org/10.3390/math14010013"
