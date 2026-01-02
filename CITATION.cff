@@ -9,10 +9,12 @@ authors:
     given-names: Veneta
     affiliation: "Faculty of Mathematics and Informatics, Sofia University 'St. Kliment Ohridski'"
     orcid: "https://orcid.org/0000-0001-6019-7106"
+    email: v.koleva@fmi.uni-sofia.bg
   - family-names: Hristov
     given-names: Tsvetan
     affiliation: "Faculty of Mathematics and Informatics, Sofia University 'St. Kliment Ohridski'"
     orcid: "https://orcid.org/0000-0002-6417-1816"
+    email: tsvetan@fmi.uni-sofia.bg
 preferred-citation: 
     type: article
     title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data"
