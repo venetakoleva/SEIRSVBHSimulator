@@ -2,19 +2,19 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite both this repository and the related paper."
 title: "SEIRSVBHSimulator"
-doi: 10.5281/zenodo.17715035
+doi: 10.5281/zenodo.17715034
 date-released: 2025-10-11
 authors:
   - family-names: Koleva
     given-names: Veneta
     affiliation: "Faculty of Mathematics and Informatics, Sofia University 'St. Kliment Ohridski'"
     orcid: "https://orcid.org/0000-0001-6019-7106"
-    email: v.koleva@fmi.uni-sofia.bg
+    email: "v.koleva@fmi.uni-sofia.bg"
   - family-names: Hristov
     given-names: Tsvetan
     affiliation: "Faculty of Mathematics and Informatics, Sofia University 'St. Kliment Ohridski'"
     orcid: "https://orcid.org/0000-0002-6417-1816"
-    email: tsvetan@fmi.uni-sofia.bg
+    email: "tsvetan@fmi.uni-sofia.bg"
 preferred-citation: 
     type: article
     title: "Inverse Problem for an Extended Time-Dependent SEIRS Model: Validation with COVID-19 Real-World Data"
